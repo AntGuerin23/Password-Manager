@@ -1,0 +1,10 @@
+extends header
+
+block container
+    #wrapper.vh-100
+        +sidebar
+        #content-wrapper.d-flex.flex-column
+            #content
+                +nav
+                block content
+            +footer
