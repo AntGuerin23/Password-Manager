@@ -1,3 +1,32 @@
-h1 {
-    display : none;
+#bs-override.blue-gradient {
+    background: rgb(39,31,161) !important;
+    background: linear-gradient(90deg, rgba(39,31,161,1) 0%, rgba(78,115,223,1) 35%, rgba(80,141,195,1) 100%) !important;
+}
+
+.login-image {
+    background: url(https://static.vecteezy.com/system/resources/previews/000/486/202/large_2x/cyber-security-vector-illustration.jpg) center;
+    background-size: cover;
+}
+
+.register-image {
+    background: url(https://static.vecteezy.com/system/resources/previews/000/517/802/large_2x/cyber-security-vector.png) center;
+    background-size: cover;
+}
+
+.sticky {
+    right: 4em;
+    position: fixed;
+    width: 9em;
+}
+
+.sticky-below {
+    right: 4em;
+    top: 10em;
+    position: fixed;
+    width: 9em;
+}
+
+img.brand-image#brand {
+    height: 12em;
+    width: auto;
 }

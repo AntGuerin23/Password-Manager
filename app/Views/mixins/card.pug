@@ -1,0 +1,33 @@
+mixin card(title)
+    .card.shadow.mb-4
+        .card-header.py-3.d-flex.flex-row.align-items-center.justify-content-between
+            h6.m-0.font-weight-bold.text-primary= title
+        .card-body
+            block
+
+mixin card-image(title, image, password)
+    .card.shadow.mb-4
+        .card-header.py-3.d-flex.flex-row.align-items-center.justify-content-between
+            h6.m-0.font-weight-bold.text-primary= title
+        .d-flex.flex-row
+            img.img-fluid.img-thumbnail.brand-image#brand(src="assets/images/" + image)
+            .card-body
+                +card-content(password)
+
+mixin card-content(password)
+    .row.p-2
+        .col-8.my-auto
+            h5.text-dark.p-0.m-0.d-inline-block Password : ●●●●●● #{password}
+            +button-icon-only("fa-solid fa-eye", "ml-2 btn-info")
+        .col-4
+            .row.p-2
+                +split-button("Delete password", "fa-solid fa-trash-can", "btn-danger")
+    hr.m-0
+    .row.p-2
+        .col-4.my-auto
+            +input("password", "text", "New password")
+        .col-4.my-auto
+            +input("password_confirm", "text", "Confirm password")
+        .col-4
+            .row.p-2
+                +split-button("Modify password", "fa-solid fa-arrows-rotate", "btn-info")

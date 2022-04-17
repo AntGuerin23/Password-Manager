@@ -1,4 +1,15 @@
 extends parents/container
 
 block content
-    h1  bruh
+    .d-sm-flex.align-items-center.justify-content-between.mb-4
+        h1.h3.mb-0.text-gray-800 See Your Passwords
+
+        +button-icon("Add password", "fa-solid fa-plus", "sticky btn-success")
+        +button-icon("Save as .CSV", "fas fa-download", "sticky-below")
+
+    .col-10
+        +card-image("Netflix", "netflix.jpg", "")
+        +card-image("Google", "google.png", "")
+        +card-image("Github", "github.png", "")
+        +card-image("Spotify", "spotify.png", "")
+        +card-image("Facebook", "facebook.png", "")

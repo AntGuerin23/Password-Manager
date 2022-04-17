@@ -1,0 +1,22 @@
+mixin input(name, type, placeholder)
+    .form-group.my-auto
+        input#exampleInputEmail.form-control.form-control-user(name=name type=type placeholder=placeholder)
+
+mixin title(text)
+    h3.mb-0.text-gray-800= text
+
+mixin button-icon(text, iconClasses, buttonClasses)
+    a.d-none.d-sm-inline-block.btn.btn-sm.btn-primary.shadow-sm(href='#', class=buttonClasses)
+        i(aria-hidden='true', class=iconClasses)
+        |  #{text}
+
+mixin split-button(text, iconClasses, buttonClasses)
+    a.btn.btn-primary.btn-icon-split(href="#", class=buttonClasses)
+        span.icon.text-white-50
+            i(class= iconClasses)
+        span.text= text
+
+mixin button-icon-only(iconClasses, buttonClasses)
+    a.d-none.d-sm-inline-block.btn.btn-sm.btn-primary.shadow-sm(href='#', class=buttonClasses)
+        i(aria-hidden='true', class=iconClasses)
+
