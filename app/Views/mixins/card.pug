@@ -21,13 +21,15 @@ mixin card-content(password)
             +button-icon-only("fa-solid fa-eye", "ml-2 btn-info")
         .col-4
             .row.p-2
+                +form("delete", "password/id")
                 +split-button("Delete password", "fa-solid fa-trash-can", "btn-danger")
     hr.m-0
-    .row.p-2
-        .col-4.my-auto
-            +input("password", "text", "New password")
-        .col-4.my-auto
-            +input("password_confirm", "text", "Confirm password")
-        .col-4
-            .row.p-2
-                +split-button("Modify password", "fa-solid fa-arrows-rotate", "btn-info")
+    +form("put", "password/id")
+        .row.p-2
+            .col-4.my-auto
+                +input("password", "text", "New password")
+            .col-4.my-auto
+                +input("password_confirm", "text", "Confirm password")
+            .col-4
+                .row.p-2
+                    +split-button("Modify password", "fa-solid fa-arrows-rotate", "btn-info", "submit")

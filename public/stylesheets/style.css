@@ -30,3 +30,7 @@ img.brand-image#brand {
     height: 12em;
     width: auto;
 }
+
+ul {
+    margin: 0;
+}

@@ -4,6 +4,7 @@ block body
     .blue-gradient#bs-override
         .align-items-center.d-flex.min-vh-100
             .container
+                +flash
                 .row.justify-content-center
                     .col-xl-10.col-lg-12.col-md-9
                         .card.o-hidden.border-0.shadow-lg.my-5
@@ -14,13 +15,20 @@ block body
                                         .p-5
                                             .text-center
                                                 h1.h4.text-gray-900.mb-4 Login
-                                            form.user(action='login' method='post')
+                                            +form("post", "login").user
                                                 +input("username", "text", "Enter username")
                                                 br
                                                 +input("password", "password", "Password")
+                                                br
+                                                .custom-control.custom-checkbox.small
+                                                    input#customCheck.custom-control-input(type='checkbox')
+                                                    label.custom-control-label.user-select-none(for='customCheck')
+                                                        | Remember Me
                                                 br
                                                 button.btn.btn-primary.btn-user.btn-block(type='submit')
                                                     | Login
                                             hr
                                             .text-center
-                                                a.small(href='register') Create an Account
+                                                a.small(href="forgot-password") Forgot password ?
+                                            .text-center
+                                                a.small(href="register") Create an Account

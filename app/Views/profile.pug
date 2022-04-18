@@ -1,0 +1,21 @@
+extends parents/container
+
+block content
+    +title("Manage Profile")
+    br
+    +card("Modify Password")
+        +form("put", "register")
+            .row
+                .col-4
+                    +input("old-password", "password", "Old password", "1")
+                    br
+                    +input("new-password", "password", "New password", "2")
+                    br
+                    +button("Confirm password change", "fa-solid fa-check", "btn-success", "4", "submit")
+
+                .col-4.my-auto
+                    +input("new-password-confirm", "password", "Confirm new password", "3")
+
+    +card("Activate 2FA")
+
+    +card("Active Connections")

@@ -9,7 +9,8 @@ mixin sidebar
         +sidebar-item("profile", "fa-solid fa-user", "Manage profile")
         +sidebar-item("add-password", "fa-solid fa-plus", "Add password")
         li.nav-item.mx-auto.mt-auto.mb-5
-            +button-icon("Logout", "fa fa-sign-out", "btn-danger")
+            +form("delete", "login")
+                +button-small-form("Logout", "fa fa-sign-out", "btn-danger", "submit")
 
 mixin nav
     nav.navbar.navbar-expand.navbar-light.bg-white.topbar.mb-4.sticky-top.shadow
@@ -28,8 +29,10 @@ mixin footer
                 span Copyright &copy; Antoine Guérin 2022
 
 mixin sidebar-item(link, icon, name)
-    li.nav-item
+    - status = (link === location) ? "active" :  "";
+    li.nav-item(class= status)
         a.nav-link(href=link)
             i(aria-hidden='true', class=icon)
             span= name
+
     hr.sidebar-divider.my-0

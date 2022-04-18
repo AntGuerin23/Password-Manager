@@ -1,22 +1,42 @@
-mixin input(name, type, placeholder)
+mixin input(name, type, placeholder, tabIndex)
     .form-group.my-auto
-        input#exampleInputEmail.form-control.form-control-user(name=name type=type placeholder=placeholder)
+        input.form-control.form-control-user(name=name type=type placeholder=placeholder tabIndex= tabIndex)
 
 mixin title(text)
     h3.mb-0.text-gray-800= text
 
-mixin button-icon(text, iconClasses, buttonClasses)
-    a.d-none.d-sm-inline-block.btn.btn-sm.btn-primary.shadow-sm(href='#', class=buttonClasses)
+mixin button-small(text, iconClasses, buttonClasses, link, type)
+    a.d-none.d-sm-inline-block.btn.btn-sm.btn-primary.shadow-sm(href= link, class=buttonClasses, type= type)
         i(aria-hidden='true', class=iconClasses)
         |  #{text}
 
-mixin split-button(text, iconClasses, buttonClasses)
-    a.btn.btn-primary.btn-icon-split(href="#", class=buttonClasses)
+mixin button-small-form(text, iconClasses, buttonClasses, type)
+    button.d-none.d-sm-inline-block.btn.btn-sm.btn-primary.shadow-sm(class=buttonClasses, type= type)
+        i(aria-hidden='true', class=iconClasses)
+        |  #{text}
+
+mixin button(text, iconClasses, buttonClasses, type)
+    button.d-none.d-sm-inline-block.btn.btn-primary.shadow-sm(class=buttonClasses type= type)
+        i(aria-hidden='true', class=iconClasses)
+        |  #{text}
+
+mixin split-button(text, iconClasses, buttonClasses, tabIndex, type)
+    a.btn.btn-primary.btn-icon-split(href="#" class=buttonClasses tabIndex= tabIndex type= type)
         span.icon.text-white-50
             i(class= iconClasses)
         span.text= text
 
-mixin button-icon-only(iconClasses, buttonClasses)
-    a.d-none.d-sm-inline-block.btn.btn-sm.btn-primary.shadow-sm(href='#', class=buttonClasses)
+mixin button-icon-only(iconClasses, buttonClasses, id)
+    a.d-none.d-sm-inline-block.btn.btn-sm.btn-primary.shadow-sm(href='#', class=buttonClasses, id= id)
         i(aria-hidden='true', class=iconClasses)
+
+mixin datalist(name, type, placeholder, tabIndex)
+    .form-group.my-auto
+        input.form-control.form-control-user(name=name type=type placeholder=placeholder tabIndex= tabIndex list="list")
+        datalist#list
+            option(value="Netflix")
+            option(value="Google")
+            option(value="Github")
+            option(value="Spotify")
+            option(value="Facebook")
 
