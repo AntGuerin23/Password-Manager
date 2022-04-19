@@ -30,10 +30,9 @@ class UserBroker extends Broker
         return $result->username;
     }
 
-    public function tryAuthenticating($email, $password) : bool
+    public function tryAuthenticating($email, $password): bool
     {
         $user = $this->selectSingle("SELECT * FROM \"user\" WHERE username  = ?", [$email]);
-
         if ($user == null) return false;
         if (Cryptography::verifyHashedPassword($password, $user->password)) {
             Session::getInstance()->refresh();
@@ -42,5 +41,15 @@ class UserBroker extends Broker
         } else {
             return false;
         }
+    }
+
+    public function updatePassword($newPassword)
+    {
+        $this->query("UPDATE \"user\" SET password = ? WHERE id = ?", [Cryptography::hashPassword($newPassword), Session::getInstance()->read("currentUser")]);
+    }
+
+    public function getPassword() : string
+    {
+        return $this->selectSingle("SELECT password FROM \"user\" WHERE id = ?", [Session::getInstance()->read("currentUser")])->password;
     }
 }

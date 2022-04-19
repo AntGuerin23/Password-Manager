@@ -6,7 +6,8 @@
  * files. Normally used to mimic very low level operation akin to a native PHP function.
  */
 
-function getImagePath($name) {
+function getImagePath($name)
+{
     switch (true) {
         case stristr($name, "Netflix") :
             return "netflix.jpg";

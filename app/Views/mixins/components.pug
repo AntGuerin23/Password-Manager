@@ -27,7 +27,7 @@ mixin split-button(text, iconClasses, buttonClasses, tabIndex, type)
         span.text= text
 
 mixin button-icon-only(iconClasses, buttonClasses, target)
-    if (target === undefined ? "" :  "")
+    if (target === undefined ? "" : "")
         a.d-none.d-sm-inline-block.btn.btn-sm.btn-primary.shadow-sm(class= buttonClasses)
             i(aria-hidden='true', class=iconClasses)
     else

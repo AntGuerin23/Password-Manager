@@ -11,15 +11,16 @@ require "env.php";
 // region [Zephyrus instance and routing]
 // Prepares the mandatory router instance for the execution of the Controller class route methods and launch the
 // Zephyrus bootstrap based on the configurations.
+use Zephyrus\Application\Bootstrap;
 use Zephyrus\Application\ErrorHandler;
+use Zephyrus\Application\Localization;
+use Zephyrus\Application\Session;
 use Zephyrus\Exceptions\DatabaseException;
+use Zephyrus\Exceptions\LocalizationException;
 use Zephyrus\Exceptions\RouteNotFoundException;
 use Zephyrus\Exceptions\SessionException;
 use Zephyrus\Network\Router;
-use Zephyrus\Application\Bootstrap;
-use Zephyrus\Application\Session;
-use Zephyrus\Application\Localization;
-use Zephyrus\Exceptions\LocalizationException;
+
 $router = new Router();
 include(Bootstrap::getHelperFunctionsPath());
 Bootstrap::start();

@@ -67,6 +67,8 @@ class AuthenticationController extends Controller
     private function buildLoginForm(): Form
     {
         $form = $this->buildForm();
+        //Username must exist
+        //Password must be valid for username
         $form->field("username")->validate(Rule::notEmpty("Please enter a username"));
         $form->field("password")->validate(Rule::notEmpty("Please enter a password"));
         return $form;
@@ -82,7 +84,7 @@ class AuthenticationController extends Controller
         return $form;
     }
 
-    private function tryAuthenticating($form) : bool
+    private function tryAuthenticating($form): bool
     {
         $loginInfo = $form->buildObject();
         $broker = new UserBroker();
@@ -95,7 +97,7 @@ class AuthenticationController extends Controller
         }
     }
 
-    private function tryRegister($form) : bool
+    private function tryRegister($form): bool
     {
         if ($form->verify()) {
             $broker = new UserBroker();

@@ -5,8 +5,6 @@ namespace Controllers;
 use Models\Brokers\PasswordBroker;
 use Models\Brokers\UserBroker;
 use Models\Redirector;
-use Zephyrus\Application\Flash;
-use Zephyrus\Application\Rule;
 use Zephyrus\Application\Session;
 use Zephyrus\Network\Response;
 
@@ -24,7 +22,6 @@ class IndexController extends Controller
     public function initializeRoutes()
     {
         $this->get("/", "index");
-        $this->get("/profile", "profile");
         $this->delete("/login", "logout");
     }
 
@@ -41,16 +38,6 @@ class IndexController extends Controller
             "location" => "/",
             "username" => $userBroker->findUsernameById(Session::getInstance()->read("currentUser")),
             "passwords" => $passwords
-        ]);
-    }
-
-    public function profile()
-    {
-        $broker = new UserBroker();
-        return $this->render("profile", [
-            "title" => "Manage your profile",
-            "location" => "profile",
-            "username" => $broker->findUsernameById(Session::getInstance()->read("currentUser"))
         ]);
     }
 

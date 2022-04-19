@@ -9,7 +9,7 @@ use Zephyrus\Utilities\Formatter;
  * useful for defining the formats applying to your project.
  */
 Formatter::register('date_full', function ($dateTime) {
-    if (!$dateTime instanceof \DateTime) {
+    if (!$dateTime instanceof DateTime) {
         $dateTime = new DateTime($dateTime);
     }
     return strftime("%A %e %B", $dateTime->getTimestamp());

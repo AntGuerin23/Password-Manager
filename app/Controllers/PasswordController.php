@@ -6,7 +6,6 @@ use Models\Brokers\PasswordBroker;
 use Models\Brokers\UserBroker;
 use Models\Redirector;
 use Zephyrus\Application\Flash;
-use Zephyrus\Application\Form;
 use Zephyrus\Application\Rule;
 use Zephyrus\Application\Session;
 use Zephyrus\Network\Response;
@@ -54,14 +53,16 @@ class PasswordController extends Controller
         return $this->redirect("/");
     }
 
-    public function deletePassword($id) {
+    public function deletePassword($id)
+    {
         $broker = new PasswordBroker();
         $broker->delete($id);
         Flash::info("The requested password has been deleted");
         return $this->redirect("/");
     }
 
-    public function updatePassword($id) {
+    public function updatePassword($id)
+    {
         $form = $this->buildForm();
         $form->field("password")->validate(Rule::notEmpty("Please enter a new password"));
         $form->field("passwordConfirm")->validate(Rule::sameAs("password", "The two passwords do not match"));
