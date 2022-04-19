@@ -23,6 +23,7 @@ class IndexController extends Controller
     {
         $this->get("/", "index");
         $this->delete("/login", "logout");
+        $this->get("/passwords", "export");
     }
 
     public function index()
@@ -45,5 +46,16 @@ class IndexController extends Controller
     {
         Session::getInstance()->remove("currentUser");
         return $this->redirect("/");
+    }
+
+    public function export()
+    {
+        $broker = new PasswordBroker();
+        $passwords = $broker->findAllById(Session::getInstance()->read("currentUser"));
+        $content = "sep=,\nApplication Name,Password\n";
+        foreach ($passwords as $password) {
+            $content .= "$password->name,$password->password\n";
+        }
+        return $this->downloadContent($content, "passwords.csv", "application/CSV");
     }
 }
