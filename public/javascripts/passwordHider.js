@@ -1,4 +1,4 @@
-const staticStart = "Password : "
+const staticStart = "Password  : "
 $("[data-target]").on("click", toggle)
 $("[data-id]").each(hide)
 
@@ -9,7 +9,7 @@ function toggle() {
         passwordElement.html(staticStart + passwordElement.data("password"))
         $(this).html(`<i aria-hidden="true" class="fa-solid fa-eye-slash"></i>`)
     } else {
-        passwordElement.html(staticStart + "●".repeat(passwordElement.html().length - 11))
+        passwordElement.html(staticStart + "●".repeat(passwordElement.html().length - staticStart.length))
         $(this).html(`<i aria-hidden="true" class="fa-solid fa-eye"></i>`)
 
     }

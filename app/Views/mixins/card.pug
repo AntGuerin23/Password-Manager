@@ -5,20 +5,24 @@ mixin card(title)
         .card-body
             block
 
-mixin card-image(title, image, password, id)
+mixin card-image(title, image, password, p_username, id)
     .card.shadow.mb-4
         .card-header.py-3.d-flex.flex-row.align-items-center.justify-content-between
             h6.m-0.font-weight-bold.text-primary= title
         .d-flex.flex-row
             img.img-fluid.img-thumbnail.brand-image#brand(src="assets/images/" + image)
             .card-body
-                +card-content(password, id)
+                +card-content(password, p_username, id)
 
-mixin card-content(password, id)
+mixin card-content(password, p_username, id)
     .row.p-2
         .col-8.my-auto.d-flex
-            h5.text-dark.p-0.m-0.d-inline-block.align-self-center(data-id= id, data-password= password) Password : #{password}
-            +button-icon-only("fa-solid fa-eye", "ml-2 btn-info eye-btn", id)
+            .d-flex.flex-column
+                h5.text-dark.p-0.m-0.d-inline-block.mb-2 Username : #{p_username}
+                div
+                    h5.text-dark.p-0.m-0.d-inline-block.align-self-center.whitespace(data-id= id, data-password= password) Password  : #{password}
+                    +button-icon-only("fa-solid fa-eye", "ml-2 btn-info eye-btn", id)
+
         .col-4
             .row.p-2
                 +form("delete", "password/" + id)

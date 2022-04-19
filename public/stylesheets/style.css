@@ -40,3 +40,7 @@ ul {
 a.eye-btn {
     width: 2.5em !important;
 }
+
+.whitespace {
+    white-space: pre;
+}

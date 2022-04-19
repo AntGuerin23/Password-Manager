@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "SosPass",
+  "version": "0.1",
+  "content_scripts": [
+  {
+    "matches": ["https://www.facebook.com/login"],
+    "js": ["vendor/jquery.min.js", "app.js"]
+  }]
+
+
+
+
+}

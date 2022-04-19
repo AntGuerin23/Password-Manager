@@ -14,7 +14,7 @@ class PasswordBroker extends Broker
     public function insert($form)
     {
         //TODO : Encrypt
-        $this->query("INSERT INTO password (user_id, name, password) VALUES (?, ?, ?)", [Session::getInstance()->read("currentUser"), $form->appName, $form->password]);
+        $this->query("INSERT INTO password (user_id, domain, username, password) VALUES (?, ?, ?, ?)", [Session::getInstance()->read("currentUser"), $form->appName, $form->username, $form->password]);
     }
 
     public function delete($id)

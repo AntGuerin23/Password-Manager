@@ -31,7 +31,7 @@ class IndexController extends Controller
         $broker = new PasswordBroker();
         $passwords = $broker->findAllById(Session::getInstance()->read("currentUser"));
         foreach ($passwords as $password) {
-            $password->{"imgPath"} = getImagePath($password->name);
+            $password->{"imgPath"} = getImagePath($password->domain);
         }
         $userBroker = new UserBroker();
         return $this->render("index", [
@@ -52,9 +52,9 @@ class IndexController extends Controller
     {
         $broker = new PasswordBroker();
         $passwords = $broker->findAllById(Session::getInstance()->read("currentUser"));
-        $content = "sep=,\nApplication Name,Password\n";
+        $content = "sep=,\nSite,Password\n";
         foreach ($passwords as $password) {
-            $content .= "$password->name,$password->password\n";
+            $content .= "$password->domain,$password->password\n";
         }
         return $this->downloadContent($content, "passwords.csv", "application/CSV");
     }

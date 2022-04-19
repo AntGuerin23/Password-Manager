@@ -10,6 +10,6 @@ block content
         -empty = true
         each password in passwords
             -empty = false
-            +card-image(password["name"], password["imgPath"], password["password"], password["id"])
+            +card-image(password["domain"], password["imgPath"], password["password"], password["username"], password["id"])
         if (empty)
             h1 You currently don't have any passwords
