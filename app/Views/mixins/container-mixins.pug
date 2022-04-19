@@ -19,14 +19,15 @@ mixin nav
             .topbar-divider.d-none.d-sm-block
             li.nav-item.dropdown.no-arrow
                 a.nav-link.dropdown-toggle(href='profile' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
-                    span.mr-2.d-none.d-lg-inline.text-gray-600.small
-                        img.img-profile.rounded-circle(src='assets/images/undraw_profile.svg')
+                    span.mr-2.d-none.d-lg-inline.text-gray-600.small= username
+                    img.img-profile.rounded-circle(src='assets/images/undraw_profile.svg')
 
 mixin footer
     footer.sticky-footer.bg-white
         .container.my-auto
             .copyright.text-center.my-auto
                 span Copyright &copy; Antoine Guérin 2022
+    script(src="javascripts/vendor/template/scripts/jquery/jquery.min.js")
 
 mixin sidebar-item(link, icon, name)
     - status = (link === location) ? "active" :  "";

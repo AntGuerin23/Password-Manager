@@ -2,15 +2,18 @@
 
 namespace Controllers;
 
+use Models\Brokers\PasswordBroker;
 use Models\Brokers\UserBroker;
 use Models\Redirector;
+use Zephyrus\Application\Flash;
+use Zephyrus\Application\Rule;
 use Zephyrus\Application\Session;
 use Zephyrus\Network\Response;
 
-class MainController extends Controller
+class IndexController extends Controller
 {
 
-    public function before() : ?Response
+    public function before(): ?Response
     {
         if (Redirector::isForbidden(true)) {
             return $this->redirect("login");
@@ -22,36 +25,37 @@ class MainController extends Controller
     {
         $this->get("/", "index");
         $this->get("/profile", "profile");
-        $this->get("/add-password", "addPassword");
         $this->delete("/login", "logout");
     }
 
     public function index()
     {
-        //Get every password for user
+        $broker = new PasswordBroker();
+        $passwords = $broker->findAllById(Session::getInstance()->read("currentUser"));
+        foreach ($passwords as $password) {
+            $password->{"imgPath"} = getImagePath($password->name);
+        }
+        $userBroker = new UserBroker();
         return $this->render("index", [
             "title" => "See your passwords",
-            "location" => "/"
+            "location" => "/",
+            "username" => $userBroker->findUsernameById(Session::getInstance()->read("currentUser")),
+            "passwords" => $passwords
         ]);
     }
 
     public function profile()
     {
+        $broker = new UserBroker();
         return $this->render("profile", [
             "title" => "Manage your profile",
-            "location" => "profile"
+            "location" => "profile",
+            "username" => $broker->findUsernameById(Session::getInstance()->read("currentUser"))
         ]);
     }
 
-    public function addPassword()
+    public function logout()
     {
-        return $this->render("add-password", [
-            "title" => "Add a new password",
-            "location" => "add-password"
-        ]);
-    }
-
-    public function logout() {
         Session::getInstance()->remove("currentUser");
         return $this->redirect("/");
     }

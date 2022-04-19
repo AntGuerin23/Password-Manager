@@ -11,12 +11,12 @@ class UserBroker extends Broker
 
     public function findById($id)
     {
-        return $this->selectSingle("SELECT * FROM public.user WHERE id  = ?", [$id]);
+        return $this->selectSingle("SELECT * FROM \"user\" WHERE id  = ?", [$id]);
     }
 
     public function insert(stdClass $client): int
     {
-        $this->query("INSERT INTO public.user(username, email, password) VALUES (?, ?, ?)", [
+        $this->query("INSERT INTO \"user\"(username, email, password) VALUES (?, ?, ?)", [
             $client->username,
             $client->email,
             Cryptography::hashPassword($client->password)
@@ -32,7 +32,7 @@ class UserBroker extends Broker
 
     public function tryAuthenticating($email, $password) : bool
     {
-        $user = $this->selectSingle("SELECT * FROM public.user WHERE username  = ?", [$email]);
+        $user = $this->selectSingle("SELECT * FROM \"user\" WHERE username  = ?", [$email]);
 
         if ($user == null) return false;
         if (Cryptography::verifyHashedPassword($password, $user->password)) {

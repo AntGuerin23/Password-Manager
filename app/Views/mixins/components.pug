@@ -16,23 +16,27 @@ mixin button-small-form(text, iconClasses, buttonClasses, type)
         |  #{text}
 
 mixin button(text, iconClasses, buttonClasses, type)
-    button.d-none.d-sm-inline-block.btn.btn-primary.shadow-sm(class=buttonClasses type= type)
+    button.d-none.d-sm-inline-block.btn.btn-primary.shadow-sm(class=buttonClasses, type= type)
         i(aria-hidden='true', class=iconClasses)
         |  #{text}
 
 mixin split-button(text, iconClasses, buttonClasses, tabIndex, type)
-    a.btn.btn-primary.btn-icon-split(href="#" class=buttonClasses tabIndex= tabIndex type= type)
+    button.btn.btn-primary.btn-icon-split(class=buttonClasses, tabIndex= tabIndex, type= type)
         span.icon.text-white-50
             i(class= iconClasses)
         span.text= text
 
-mixin button-icon-only(iconClasses, buttonClasses, id)
-    a.d-none.d-sm-inline-block.btn.btn-sm.btn-primary.shadow-sm(href='#', class=buttonClasses, id= id)
-        i(aria-hidden='true', class=iconClasses)
+mixin button-icon-only(iconClasses, buttonClasses, target)
+    if (target === undefined ? "" :  "")
+        a.d-none.d-sm-inline-block.btn.btn-sm.btn-primary.shadow-sm(class= buttonClasses)
+            i(aria-hidden='true', class=iconClasses)
+    else
+        a.d-none.d-sm-inline-block.btn.btn-sm.btn-primary.shadow-sm(class= buttonClasses, data-target= target)
+            i(aria-hidden='true', class=iconClasses)
 
 mixin datalist(name, type, placeholder, tabIndex)
     .form-group.my-auto
-        input.form-control.form-control-user(name=name type=type placeholder=placeholder tabIndex= tabIndex list="list")
+        input.form-control.form-control-user(name=name, type=type, placeholder=placeholder, tabIndex= tabIndex, list="list")
         datalist#list
             option(value="Netflix")
             option(value="Google")

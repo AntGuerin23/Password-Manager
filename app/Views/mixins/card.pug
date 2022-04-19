@@ -5,31 +5,31 @@ mixin card(title)
         .card-body
             block
 
-mixin card-image(title, image, password)
+mixin card-image(title, image, password, id)
     .card.shadow.mb-4
         .card-header.py-3.d-flex.flex-row.align-items-center.justify-content-between
             h6.m-0.font-weight-bold.text-primary= title
         .d-flex.flex-row
             img.img-fluid.img-thumbnail.brand-image#brand(src="assets/images/" + image)
             .card-body
-                +card-content(password)
+                +card-content(password, id)
 
-mixin card-content(password)
+mixin card-content(password, id)
     .row.p-2
-        .col-8.my-auto
-            h5.text-dark.p-0.m-0.d-inline-block Password : ●●●●●● #{password}
-            +button-icon-only("fa-solid fa-eye", "ml-2 btn-info")
+        .col-8.my-auto.d-flex
+            h5.text-dark.p-0.m-0.d-inline-block.align-self-center(data-id= id, data-password= password) Password : #{password}
+            +button-icon-only("fa-solid fa-eye", "ml-2 btn-info eye-btn", id)
         .col-4
             .row.p-2
-                +form("delete", "password/id")
-                +split-button("Delete password", "fa-solid fa-trash-can", "btn-danger")
+                +form("delete", "password/" + id)
+                    +split-button("Delete password", "fa-solid fa-trash-can", "btn-danger", "1", "submit")
     hr.m-0
-    +form("put", "password/id")
+    +form("put", "password/" + id)
         .row.p-2
             .col-4.my-auto
-                +input("password", "text", "New password")
+                +input("password", "password", "New password")
             .col-4.my-auto
-                +input("password_confirm", "text", "Confirm password")
+                +input("passwordConfirm", "password", "Confirm password")
             .col-4
                 .row.p-2
-                    +split-button("Modify password", "fa-solid fa-arrows-rotate", "btn-info", "submit")
+                    +split-button("Modify password", "fa-solid fa-arrows-rotate", "btn-info", "2", "submit")

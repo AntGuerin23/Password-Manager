@@ -14,12 +14,14 @@
 }
 
 .sticky {
+    z-index: 1;
     right: 4em;
     position: fixed;
     width: 9em;
 }
 
 .sticky-below {
+    z-index: 1;
     right: 4em;
     top: 10em;
     position: fixed;
@@ -33,4 +35,8 @@ img.brand-image#brand {
 
 ul {
     margin: 0;
+}
+
+a.eye-btn {
+    width: 2.5em !important;
 }
