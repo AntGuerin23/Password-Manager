@@ -64,8 +64,8 @@ class PasswordController extends Controller
     public function updatePassword($id)
     {
         $form = $this->buildForm();
-        $form->field("password")->validate(Rule::notEmpty("Please enter a new password"));
-        $form->field("passwordConfirm")->validate(Rule::sameAs("password", "The two passwords do not match"));
+        $form->field("updatePassword")->validate(Rule::notEmpty("Please enter a new password"));
+        $form->field("updatePasswordConfirm")->validate(Rule::sameAs("password", "The two passwords do not match"));
         if (!$form->verify()) {
             Flash::error($form->getErrorMessages());
             return $this->redirect("/");

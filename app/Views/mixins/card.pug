@@ -31,9 +31,9 @@ mixin card-content(password, p_username, id)
     +form("put", "password/" + id)
         .row.p-2
             .col-4.my-auto
-                +input("password", "password", "New password")
+                +input("updatePassword", "password", "New password")
             .col-4.my-auto
-                +input("passwordConfirm", "password", "Confirm password")
+                +input("updatePasswordConfirm", "password", "Confirm password")
             .col-4
                 .row.p-2
                     +split-button("Modify password", "fa-solid fa-arrows-rotate", "btn-info", "2", "submit")

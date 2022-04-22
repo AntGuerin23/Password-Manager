@@ -42,7 +42,7 @@ class ProfileController extends Controller
     {
         $form = $this->buildForm();
         $form->field("oldPassword")->validate(CustomRule::passwordValid());
-        $form->field("newPassword")->validate(Rule::notEmpty("Please enter a new password"));
+        $form->field("newPassword")->validate(Rule::passwordCompliant("Password must contain at least one uppercase, one lowercase and one number (8 chars min)"));
         $form->field("newPasswordConfirm")->validate(Rule::sameAs("newPassword", "The two passwords do not match"));
         if (!$form->verify()) {
             Flash::error($form->getErrorMessages());

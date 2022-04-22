@@ -3,6 +3,7 @@
 namespace Models\Brokers;
 
 use Zephyrus\Application\Session;
+use Zephyrus\Security\Cryptography;
 
 class PasswordBroker extends Broker
 {

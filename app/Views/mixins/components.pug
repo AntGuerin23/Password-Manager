@@ -1,6 +1,7 @@
 mixin input(name, type, placeholder, tabIndex)
+    - value = val(name, "")
     .form-group.my-auto
-        input.form-control.form-control-user(name=name type=type placeholder=placeholder tabIndex= tabIndex)
+        input.form-control.form-control-user(name=name type=type placeholder=placeholder tabIndex= tabIndex value=value)
 
 mixin title(text)
     h3.mb-0.text-gray-800= text

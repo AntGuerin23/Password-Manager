@@ -1,0 +1,32 @@
+version: "3.7"
+
+services:
+  webserver:
+    build:
+      context: .
+      dockerfile: "./docker/services/php80/Dockerfile"
+    container_name: "password_webserver"
+    restart: 'always'
+    ports:
+      - "80:80"
+      - "443:443"
+    links:
+      - database
+    volumes:
+      - ./:/var/www/html:cached
+      - ./docker/vhosts:/etc/apache2/sites-enabled
+
+  database:
+    build:
+      context: "./docker/services/postgres"
+    container_name: 'password_database'
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d/sql
+      - ./database.sql:/docker-entrypoint-initdb.d/1-database.sql
+    restart: 'always'
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: 'postgres'
+      POSTGRES_USER: 'password_manager'
+      POSTGRES_PASSWORD: 'Manager123'

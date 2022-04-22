@@ -24,22 +24,23 @@ class UserBroker extends Broker
         return $this->getDatabase()->getLastInsertedId();
     }
 
-    public function findUsernameById($id)
+    public function findUsernameById($id) : null | string
     {
         $result = $this->findById($id);
+        if (is_null($result)) {
+            return null;
+        }
         return $result->username;
     }
 
-    public function tryAuthenticating($email, $password): bool
+    public function tryAuthenticating($email, $password): int | null
     {
         $user = $this->selectSingle("SELECT * FROM \"user\" WHERE username  = ?", [$email]);
-        if ($user == null) return false;
+        if ($user == null) return null;
         if (Cryptography::verifyHashedPassword($password, $user->password)) {
-            Session::getInstance()->refresh();
-            Session::getInstance()->set("currentUser", $user->id);
-            return true;
+            return $user->id;
         } else {
-            return false;
+            return null;
         }
     }
 
