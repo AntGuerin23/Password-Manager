@@ -2,12 +2,13 @@
 
 namespace Models\MFA;
 
+use Models\RandomCodeGenerator;
 use Twilio\Rest\Client;
 
-class EmailSender
+class EmailSender extends Sender
 {
-    public static function sendEmail($email, $text)
+    public function send($to, $text)
     {
-        //Send email containing text
+        // TODO: Implement send() method.
     }
 }

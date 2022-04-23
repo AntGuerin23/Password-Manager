@@ -29,7 +29,6 @@ class IndexController extends Controller
 
     public function index()
     {
-        SmsSender::sendEmail("450-846-5770", "bruh");
         $broker = new PasswordBroker();
         $passwords = $broker->findAllById(Session::getInstance()->read("currentUser"));
         foreach ($passwords as $password) {
