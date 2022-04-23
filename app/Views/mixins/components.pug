@@ -1,7 +1,10 @@
 mixin input(name, type, placeholder, tabIndex)
     - value = val(name, "")
+    -validity = ""
+    if value !== ""
+        - validity = "is-valid"
     .form-group.my-auto
-        input.form-control.form-control-user(name=name type=type placeholder=placeholder tabIndex= tabIndex value=value)
+        input.form-control.form-control-user(name=name type=type placeholder=placeholder tabIndex= tabIndex value=value class=validity)
 
 mixin title(text)
     h3.mb-0.text-gray-800= text

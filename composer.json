@@ -9,7 +9,8 @@
     }
   ],
   "require": {
-    "zephyrus/zephyrus": "1.4.*"
+    "zephyrus/zephyrus": "1.4.*",
+    "twilio/sdk": "^6.36"
   },
   "require-dev": {
     "phpunit/phpunit": "9.*.*"

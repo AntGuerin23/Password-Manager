@@ -15,7 +15,7 @@ block body
                                         .p-5
                                             .text-center
                                                 h1.h4.text-gray-900.mb-4 Create an Account
-                                            form.user(action='register' method='post')
+                                            +form("post", "register").user
                                                 +input("email", "email", "Email")
                                                 br
                                                 +input("username", "text", "Username")

@@ -46,7 +46,6 @@ class AuthenticationController extends Controller
         $loginInfo = $form->buildObject();
         $id = $this->tryAuthenticating($loginInfo);
         if (!is_null($id)) {
-            die();
             //TODO : 2FA if enabled
             $this->configureSession($loginInfo, $id);
             return $this->redirect("/");

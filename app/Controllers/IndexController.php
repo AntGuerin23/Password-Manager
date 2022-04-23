@@ -4,6 +4,7 @@ namespace Controllers;
 
 use Models\Brokers\PasswordBroker;
 use Models\Brokers\UserBroker;
+use Models\MFA\SmsSender;
 use Models\Redirector;
 use Zephyrus\Application\Session;
 use Zephyrus\Network\Response;
@@ -28,6 +29,7 @@ class IndexController extends Controller
 
     public function index()
     {
+        SmsSender::sendEmail("450-846-5770", "bruh");
         $broker = new PasswordBroker();
         $passwords = $broker->findAllById(Session::getInstance()->read("currentUser"));
         foreach ($passwords as $password) {
