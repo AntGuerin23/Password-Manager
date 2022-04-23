@@ -12,7 +12,6 @@
     "zephyrus/zephyrus": "1.4.*",
     "twilio/sdk": "^6.36",
     "pragmarx/google2fa": "^8.0",
-    "bacon/bacon-qr-code": "~1.0",
     "chillerlan/php-qrcode": "^4.3"
   },
   "require-dev": {

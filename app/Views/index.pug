@@ -8,7 +8,6 @@ block content
     .col-10
         +flash()
         -empty = true
-        img(src=qr)
         each password in passwords
             -empty = false
             +card-image(password["domain"], password["imgPath"], password["password"], password["username"], password["id"])
