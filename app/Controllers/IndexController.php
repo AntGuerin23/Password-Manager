@@ -2,9 +2,10 @@
 
 namespace Controllers;
 
+use chillerlan\QRCode\QRCode;
 use Models\Brokers\PasswordBroker;
 use Models\Brokers\UserBroker;
-use Models\MFA\SmsSender;
+use Models\MFA\GoogleAuthenticator;
 use Models\Redirector;
 use Zephyrus\Application\Session;
 use Zephyrus\Network\Response;
@@ -29,6 +30,10 @@ class IndexController extends Controller
 
     public function index()
     {
+        $google = new GoogleAuthenticator();
+        $key = $google->generateKey();
+        $qr = $google->getQrCode($key);
+        echo '<img src="'.(new QRCode())->render($qr).'" alt="QR Code" />';
         $broker = new PasswordBroker();
         $passwords = $broker->findAllById(Session::getInstance()->read("currentUser"));
         foreach ($passwords as $password) {
@@ -39,7 +44,8 @@ class IndexController extends Controller
             "title" => "See your passwords",
             "location" => "/",
             "username" => $userBroker->findUsernameById(Session::getInstance()->read("currentUser")),
-            "passwords" => $passwords
+            "passwords" => $passwords,
+            "qr" => $qr
         ]);
     }
 
