@@ -35,7 +35,7 @@ class PasswordController extends Controller
         return $this->render("add-password", [
             "title" => "Add a new password",
             "location" => "add-password",
-            "username" => $broker->findUsernameById(Session::getInstance()->read("currentUser"))
+            "username" => $broker->getUsername()
         ]);
     }
 
@@ -74,6 +74,5 @@ class PasswordController extends Controller
         $broker->modify($form->buildObject()->password, $id);
         Flash::success("The requested password has been successfully modified ✔️");
         return $this->redirect("/");
-
     }
 }

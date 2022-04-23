@@ -1,0 +1,18 @@
+extends parents/container
+
+block content
+    .row
+        .col-6
+            +title("Setup Google Authenticator")
+            br
+            ul.m-0
+                li 1. Download the google authenticator app
+                li 2. Select "Scan a qr code"
+                li 3. Scan the qr code down below
+                li 4. Press the "Proceed" button to test if everything worked correctly
+                li 5. Google Authenticator MFA will now be registered to your account
+            br
+            +button-link("Proceed", "", "btn-success", "/authenticator-setup/test")
+        .col-auto
+            +small-card("QR Code")
+                img(src=qrCode)

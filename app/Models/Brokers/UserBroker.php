@@ -24,16 +24,7 @@ class UserBroker extends Broker
         return $this->getDatabase()->getLastInsertedId();
     }
 
-    public function findUsernameById($id) : null | string
-    {
-        $result = $this->findById($id);
-        if (is_null($result)) {
-            return null;
-        }
-        return $result->username;
-    }
-
-    public function tryAuthenticating($email, $password): int | null
+    public function tryAuthenticating($email, $password): int|null
     {
         $user = $this->selectSingle("SELECT * FROM \"user\" WHERE username  = ?", [$email]);
         if ($user == null) return null;
@@ -49,8 +40,31 @@ class UserBroker extends Broker
         $this->query("UPDATE \"user\" SET password = ? WHERE id = ?", [Cryptography::hashPassword($newPassword), Session::getInstance()->read("currentUser")]);
     }
 
-    public function getPassword() : string
+    public function updateAuthKey($key)
+    {
+        return $this->query("UPDATE \"user\" SET google_auth_key = ? WHERE id = ?", [$key, Session::getInstance()->read("currentUser")]);
+    }
+
+    public function getPassword(): string
     {
         return $this->selectSingle("SELECT password FROM \"user\" WHERE id = ?", [Session::getInstance()->read("currentUser")])->password;
+    }
+
+    public function getUsername(): null|string
+    {
+        $result = $this->findById(Session::getInstance()->read("currentUser"));
+        return $result->username;
+    }
+
+    public function getAuthKey()
+    {
+        $result = $this->findById(Session::getInstance()->read("currentUser"));
+        return $result->google_auth_key;
+    }
+
+    public function getEmail()
+    {
+        $result = $this->findById(Session::getInstance()->read("currentUser"));
+        return $result->email;
     }
 }

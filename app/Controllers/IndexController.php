@@ -39,7 +39,7 @@ class IndexController extends Controller
         return $this->render("index", [
             "title" => "See your passwords",
             "location" => "/",
-            "username" => $userBroker->findUsernameById(Session::getInstance()->read("currentUser")),
+            "username" => $userBroker->getUsername(),
             "passwords" => $passwords
         ]);
     }

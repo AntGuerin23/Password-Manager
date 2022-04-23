@@ -3,15 +3,12 @@
 namespace Models\MFA;
 
 use chillerlan\QRCode\QRCode;
+use Models\Brokers\UserBroker;
 use PragmaRX\Google2FA\Google2FA;
 
 class GoogleAuthenticator
 {
     private $google2fa;
-
-    //Generate key
-    //get qr code
-
 
     public function __construct()
     {
@@ -20,9 +17,10 @@ class GoogleAuthenticator
 
     public function getQrCode($key): string
     {
+        $broker = new UserBroker();
         return (new QRCode())->render($this->google2fa->getQRCodeUrl(
             'SosPass',
-            "Holder",
+            $broker->getEmail(),
             $key));
     }
 
@@ -31,9 +29,9 @@ class GoogleAuthenticator
         return $this->google2fa->generateSecretKey();
     }
 
-    public function validateCode($key, $input)
+    public function validateCode($input): bool
     {
-        //probably doesn't work
-        $this->google2fa->verifyKey($input, $key);
+        $broker = new UserBroker();
+        return $this->google2fa->verifyKey($broker->getAuthKey(), $input);
     }
 }

@@ -3,6 +3,7 @@
 namespace Controllers;
 
 use Models\Brokers\UserBroker;
+use Models\MFA\GoogleAuthenticator;
 use Models\Redirector;
 use Models\Validators\CustomRule;
 use Zephyrus\Application\Flash;
@@ -25,6 +26,8 @@ class ProfileController extends Controller
     {
         $this->get("/profile", "profile");
         $this->put("/profile/password", "updatePassword");
+        $this->get("/authenticator-setup", "setupAuthenticator");
+        $this->get("/authenticator-setup/test", "testAuthenticator");
 
     }
 
@@ -34,7 +37,7 @@ class ProfileController extends Controller
         return $this->render("profile", [
             "title" => "Manage your profile",
             "location" => "profile",
-            "username" => $broker->findUsernameById(Session::getInstance()->read("currentUser"))
+            "username" => $broker->getUsername()
         ]);
     }
 
@@ -52,5 +55,32 @@ class ProfileController extends Controller
             Flash::success("Your password has been successfully changed ✔️");
         }
         return $this->redirect("/profile");
+    }
+
+    public function setupAuthenticator()
+    {
+        $authenticator = new GoogleAuthenticator();
+        $key = $authenticator->generateKey();
+        $broker = new UserBroker();
+        $broker->updateAuthKey($key);
+        $qrCode = $authenticator->getQrCode($key);
+        return $this->render("authenticator-setup", [
+            "title" => "Setup Authenticator",
+            "location" => "authenticator-setup",
+            "username" => $broker->getUsername(),
+            "qrCode" => $qrCode
+        ]);
+    }
+
+    public function testAuthenticator() {
+        //TODO : Redirect if doesn't come from last page
+        //TODO : Test, if it doesn't work, remove from bd and redirect
+        $broker = new UserBroker();
+
+        return $this->render("authenticator-test", [
+            "title" => "Setup Authenticator",
+            "location" => "authenticator-setup/test",
+            "username" => $broker->getUsername(),
+        ]);
     }
 }

@@ -27,6 +27,7 @@ class AuthenticationController extends Controller
         $this->post("/login", "authenticate");
         $this->get("/register", "register");
         $this->post("/register", "createUser");
+        $this->get("/mfa", "mfa");
     }
 
     public function login()
@@ -68,6 +69,20 @@ class AuthenticationController extends Controller
             return $this->redirect("/login");
         }
         return $this->redirect("/register");
+    }
+
+    public function mfa() {
+        //Dynamic input fields depending on which mfa is activated in account
+        //1 => Email Code
+        //2 =>Text code
+        //3 => Authenticator code
+
+
+        return $this->render("mfa-connect", [
+            "title" => "Test Authenticator",
+            "location" => "authenticator-test",
+            "username" => (new UserBroker())->getUsername(),
+        ]);
     }
 
     private function buildLoginForm(): Form

@@ -5,6 +5,13 @@ mixin card(title)
         .card-body
             block
 
+mixin small-card(title)
+    .card.shadow.mb-4
+        .card-header.py-3
+            h6.m-0.font-weight-bold.text-primary= title
+        .card-body
+            block
+
 mixin card-image(title, image, password, p_username, id)
     .card.shadow.mb-4
         .card-header.py-3.d-flex.flex-row.align-items-center.justify-content-between
