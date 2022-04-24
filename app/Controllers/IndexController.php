@@ -5,6 +5,7 @@ namespace Controllers;
 use Models\Brokers\ConnectionBroker;
 use Models\Brokers\PasswordBroker;
 use Models\Brokers\UserBroker;
+use Models\ConnectionUpdater;
 use Models\Redirector;
 use Zephyrus\Application\Session;
 use Zephyrus\Network\Response;
@@ -17,9 +18,7 @@ class IndexController extends Controller
         if (Redirector::isForbidden(true)) {
             return $this->redirect("login");
         }
-        //TODO : if session id the same as session id in connection, update last login
-        //Session::getInstance()->getId();
-        //new ConnectionBroker())->updateLastLogin();
+        ConnectionUpdater::update();
         return parent::before();
     }
 
@@ -30,33 +29,26 @@ class IndexController extends Controller
         $this->get("/passwords", "export");
     }
 
-    public function index()
+    public function index(): Response
     {
-        $broker = new PasswordBroker();
-        $passwords = $broker->findAllById(Session::getInstance()->read("currentUser"));
-        foreach ($passwords as $password) {
-            $password->{"imgPath"} = getImagePath($password->domain);
-        }
-        $userBroker = new UserBroker();
         return $this->render("index", [
             "title" => "See your passwords",
             "location" => "/",
-            "username" => $userBroker->getUsername(),
-            "passwords" => $passwords
+            "username" => (new UserBroker)->getUsername(),
+            "passwords" => $this->getPasswords()
         ]);
     }
 
-    public function logout()
+    public function logout(): Response
     {
         Session::getInstance()->remove("currentUser");
-        $this->removeConnection();
+        ConnectionUpdater::disconnect();
         return $this->redirect("/");
     }
 
-    public function export()
+    public function export(): Response
     {
-        $broker = new PasswordBroker();
-        $passwords = $broker->findAllById(Session::getInstance()->read("currentUser"));
+        $passwords = (new PasswordBroker())->findAllById(Session::getInstance()->read("currentUser"));
         $content = "sep=,\nSite,Username,Password\n";
         foreach ($passwords as $password) {
             $content .= "$password->domain, $password->username, $password->password\n";
@@ -64,11 +56,13 @@ class IndexController extends Controller
         return $this->downloadContent($content, "passwords.csv", "application/CSV");
     }
 
-    private function removeConnection() {
-        $broker = new ConnectionBroker();
-        $connection = $broker->getActiveConnection();
-        if ($connection != null) {
-            $broker->delete($connection);
+    private function getPasswords(): array
+    {
+        $broker = new PasswordBroker();
+        $passwords = $broker->findAllById(Session::getInstance()->read("currentUser"));
+        foreach ($passwords as $password) {
+            $password->{"imgPath"} = getImagePath($password->domain);
         }
+        return $passwords;
     }
 }

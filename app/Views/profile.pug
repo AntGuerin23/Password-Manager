@@ -54,5 +54,6 @@ block content
                                 +button("Activate", "fa-solid fa-plus", "btn-info", "submit")
 
     +card("Active Connections")
-         +title("No active connections")
-         //either table or this, send boolean here (true -> connections, else no connections)
+        +connectionDataTable()
+            each connection in conn
+                +connectionDataRow(connection['id'], connection['ip'], connection['browser'], connection['last_login'], connection['days_remaining'])

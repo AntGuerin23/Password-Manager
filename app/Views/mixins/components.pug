@@ -59,3 +59,37 @@ mixin datalist(name, type, placeholder, tabIndex)
             option(value="spotify.com")
             option(value="facebook.com")
 
+mixin deleteModal()
+    #deleteModal.modal.fade(tabindex='-1')
+        .modal-dialog
+            .modal-content
+                .modal-header
+                    h5#exampleModalLabel.modal-title Confirm deletion
+                    button.close(type='button' data-dismiss='modal' aria-label='Close')
+                        span(aria-hidden='true') &times;
+                .modal-body Are you sure you want to delete this password?
+                .modal-footer
+                    button.btn.btn-secondary(type='button' data-dismiss='modal') Cancel
+                    button.btn.btn-danger#modalDelete(type='button') Delete
+
+mixin connectionDataTable(connections)
+    .table-responsive.overflow-hidden
+        table#dataTable.table.table-bordered(width='100%' cellspacing='0')
+            thead
+                tr
+                    th Ip Address
+                    th Browser
+                    th Last Login
+                    th Days Remaining
+                    th Delete
+            tbody
+                block
+mixin connectionDataRow(id, ip, browser, login, days)
+    tr
+        td= ip
+        td= browser
+        td= login
+        td= days + " days"
+        td
+            +form("delete", "/profile/connection/" + id)
+                +button("Delete", "" , "btn-danger", "submit")

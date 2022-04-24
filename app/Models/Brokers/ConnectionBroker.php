@@ -6,11 +6,6 @@ use Zephyrus\Application\Session;
 
 class ConnectionBroker extends Broker
 {
-    //Get every connection for user
-
-    //Calculate time remaining,  (connection_time + 30) - NOW
-
-    //
 
     public function insert($user_id)
     {
@@ -36,7 +31,7 @@ class ConnectionBroker extends Broker
 
     public function getConnectionsForUser()
     {
-        return $this->select("SELECT ip, browser, last_login, DATE_PART('day', (connection_time + interval '30' day) - NOW()) as days_remaining  FROM connection WHERE user_id = ?", [Session::getInstance()->read("currentUser")]);
+        return $this->select("SELECT id, ip, browser, last_login, DATE_PART('day', (connection_time + interval '30' day) - NOW()) as days_remaining  FROM connection WHERE user_id = ?", [Session::getInstance()->read("currentUser")]);
     }
 
     public function getActiveConnection(): int | null

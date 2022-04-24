@@ -2,6 +2,8 @@
 
 namespace Controllers;
 
+use JetBrains\PhpStorm\NoReturn;
+use Models\Brokers\ConnectionBroker;
 use Models\Brokers\UserBroker;
 use Models\Mfa\GoogleAuthenticator;
 use Models\Mfa\MfaChecker;
@@ -36,18 +38,18 @@ class ProfileController extends Controller
         $this->delete("/profile/authenticator", "removeGoogleMfa");
     }
 
-    public function profile()
+    #[NoReturn] public function profile()
     {
-        $broker = new UserBroker();
         return $this->render("profile", [
             "title" => "Manage your profile",
             "location" => "/profile",
-            "username" => $broker->getUsername(),
-            "activated" => MfaChecker::getActivatedMethods(Session::getInstance()->read("currentUser"))
+            "username" => (new UserBroker())->getUsername(),
+            "activated" => MfaChecker::getActivatedMethods(Session::getInstance()->read("currentUser")),
+            "conn" => (new ConnectionBroker())->getConnectionsForUser()
         ]);
     }
 
-    public function updatePassword()
+    public function updatePassword(): Response
     {
         $form = $this->buildForm();
         $form->field("oldPassword")->validate(CustomRule::passwordValid());

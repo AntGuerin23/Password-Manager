@@ -44,3 +44,8 @@ a.eye-btn {
 .whitespace {
     white-space: pre;
 }
+
+tbody tr td.align-vertical {
+    vertical-align: middle !important;
+
+}

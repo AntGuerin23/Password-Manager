@@ -16,7 +16,7 @@ mixin card-image(title, image, password, p_username, id)
         .card-header.py-3.d-flex.flex-row.align-items-center.justify-content-between
             h6.m-0.font-weight-bold.text-primary= title
         .d-flex.flex-row
-            img.img-fluid.img-thumbnail.brand-image#brand(src="assets/images/" + image)
+            img.img-fluid.img-thumbnail.brand-image#brand(src="/assets/images/" + image)
             .card-body
                 +card-content(password, p_username, id)
 
@@ -31,7 +31,7 @@ mixin card-content(password, p_username, id)
 
         .col-4
             .row.p-2
-                +form("delete", "password/" + id)
+                +form("delete", "password/" + id)(data-action= 'delete')
                     +split-button("Delete password", "fa-solid fa-trash-can", "btn-danger", "1", "submit")
     hr.m-0
     +form("put", "password/" + id)
