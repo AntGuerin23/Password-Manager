@@ -6,9 +6,11 @@ use Models\Brokers\PasswordBroker;
 use Models\Brokers\UserBroker;
 use Models\Redirector;
 use Zephyrus\Application\Flash;
+use Zephyrus\Application\Form;
 use Zephyrus\Application\Rule;
 use Zephyrus\Application\Session;
 use Zephyrus\Network\Response;
+use Zephyrus\Security\SecureHeader;
 
 class PasswordController extends Controller
 {
@@ -34,7 +36,7 @@ class PasswordController extends Controller
         $broker = new UserBroker();
         return $this->render("add-password", [
             "title" => "Add a new password",
-            "location" => "add-password",
+            "location" => "/add-password",
             "username" => $broker->getUsername()
         ]);
     }
@@ -46,7 +48,7 @@ class PasswordController extends Controller
         $form->field("password")->validate(Rule::notEmpty("Please enter a password"));
         if (!$form->verify()) {
             Flash::error($form->getErrorMessages());
-            return $this->redirect("add-password");
+            return $this->redirect("/add-password");
         }
         (new PasswordBroker())->insert($form->buildObject());
         Flash::success("Your new password has been successfully added ✔️");
@@ -65,13 +67,14 @@ class PasswordController extends Controller
     {
         $form = $this->buildForm();
         $form->field("updatePassword")->validate(Rule::notEmpty("Please enter a new password"));
-        $form->field("updatePasswordConfirm")->validate(Rule::sameAs("password", "The two passwords do not match"));
+        $form->field("updatePasswordConfirm")->validate(Rule::sameAs("updatePassword", "The two passwords do not match"));
+        Form::removeMemorizedValue();
         if (!$form->verify()) {
             Flash::error($form->getErrorMessages());
             return $this->redirect("/");
         }
         $broker = new PasswordBroker();
-        $broker->modify($form->buildObject()->password, $id);
+        $broker->modify($form->buildObject()->updatePassword, $id);
         Flash::success("The requested password has been successfully modified ✔️");
         return $this->redirect("/");
     }

@@ -16,7 +16,7 @@ class UserBroker extends Broker
 
     public function insert(stdClass $client): int
     {
-        $this->query("INSERT INTO \"user\"(username, email, password) VALUES (?, ?, ?)", [
+        $this->query("INSERT INTO \"user\"(username, email, password, email_mfa) VALUES (?, ?, ?, false)", [
             $client->username,
             $client->email,
             Cryptography::hashPassword($client->password)
@@ -42,7 +42,35 @@ class UserBroker extends Broker
 
     public function updateAuthKey($key)
     {
-        return $this->query("UPDATE \"user\" SET google_auth_key = ? WHERE id = ?", [$key, Session::getInstance()->read("currentUser")]);
+        $this->query("UPDATE \"user\" SET google_auth_key = ? WHERE id = ?", [$key, Session::getInstance()->read("currentUser")]);
+    }
+
+    public function updateEmailMfa($isActivated)
+    {
+        $this->query("UPDATE \"user\" SET email_mfa = ? WHERE id = ?", [$isActivated, Session::getInstance()->read("currentUser")]);
+    }
+
+    public function updatePhoneNb($phoneNb)
+    {
+        $this->query("UPDATE \"user\" SET phone_nb = ? WHERE id = ?", [$phoneNb, Session::getInstance()->read("currentUser")]);
+    }
+
+    public function isPhoneMfaSet($id): bool
+    {
+        $result = $this->selectSingle("SELECT phone_nb FROM \"user\" WHERE id = ?", [$id]);
+        return (!is_null($result->phone_nb));
+    }
+
+    public function isEmailMfaSet($id): bool
+    {
+        $result = $this->selectSingle("SELECT email_mfa FROM \"user\" WHERE id = ?", [$id]);
+        return $result->email_mfa;
+    }
+
+    public function isGoogleMfaSet($id): bool
+    {
+        $result = $this->selectSingle("SELECT google_auth_key FROM \"user\" WHERE id = ?", [$id]);
+        return !is_null($result->google_auth_key);
     }
 
     public function getPassword(): string
@@ -56,9 +84,9 @@ class UserBroker extends Broker
         return $result->username;
     }
 
-    public function getAuthKey()
+    public function getAuthKey($id)
     {
-        $result = $this->findById(Session::getInstance()->read("currentUser"));
+        $result = $this->findById($id);
         return $result->google_auth_key;
     }
 

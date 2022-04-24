@@ -6,10 +6,10 @@ mixin sidebar
             .mx-3 SosPass
         hr.sidebar-divider.my-0
         +sidebar-item("/", "fa fa-search", "See passwords")
-        +sidebar-item("profile", "fa-solid fa-user", "Manage profile")
-        +sidebar-item("add-password", "fa-solid fa-plus", "Add password")
+        +sidebar-item("/profile", "fa-solid fa-user", "Manage profile")
+        +sidebar-item("/add-password", "fa-solid fa-plus", "Add password")
         li.nav-item.mx-auto.mt-auto.mb-5
-            +form("delete", "login")
+            +form("delete", "/login")
                 +button-small-form("Logout", "fa fa-sign-out", "btn-danger", "submit")
 
 mixin nav

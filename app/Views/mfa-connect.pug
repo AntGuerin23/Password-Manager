@@ -1,0 +1,29 @@
+extends parents/header
+
+block body
+    .blue-gradient#bs-override
+        .align-items-center.d-flex.min-vh-100
+            .container
+                +flash
+                .row.justify-content-center
+                    .col-6
+                        .card.o-hidden.border-0.shadow-lg.my-5
+                            .card-body.p-0
+                                .row
+                                    .col
+                                        .p-5
+                                            .text-center
+                                                h1.h4.text-gray-900.mb-4 Multi-factor Authentication
+                                            +form("post", "/login/mfa").user
+                                                if activated["email"]
+                                                    +input("email", "text", "Email code")
+                                                    br
+                                                if activated["phone"]
+                                                    +input("phone", "text", "Phone code")
+                                                    br
+                                                if activated["google"]
+                                                    +input("google", "text", "Google authenticator code")
+                                                    br
+                                                button.btn.btn-primary.btn-user.btn-block(type='submit')
+                                                    | Verify
+

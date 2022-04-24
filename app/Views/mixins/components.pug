@@ -1,13 +1,19 @@
-mixin input(name, type, placeholder, tabIndex)
-    - value = val(name, "")
+mixin input(name, type, placeholder, tabIndex, refill)
+    - value = ""
+    if refill === undefined || refill === true
+        - value = val(name, "")
     -validity = ""
     if value !== ""
         - validity = "is-valid"
     .form-group.my-auto
         input.form-control.form-control-user(name=name type=type placeholder=placeholder tabIndex= tabIndex value=value class=validity)
 
+mixin input-hidden(name, value)
+    .form-group.my-auto
+        input.form-control.form-control-user(name=name type="hidden" value=value)
+
 mixin title(text)
-    h3.mb-0.text-gray-800= text
+    h3.mb-0.text-gray-800()&attributes(attributes)= text
 
 mixin button-small-link(text, iconClasses, buttonClasses, link, type)
     a.d-none.d-sm-inline-block.btn.btn-sm.btn-primary.shadow-sm(href= link, class=buttonClasses, type= type)
@@ -19,13 +25,13 @@ mixin button-small-form(text, iconClasses, buttonClasses, type)
         i(aria-hidden='true', class=iconClasses)
         |  #{text}
 
-mixin button(text, iconClasses, buttonClasses, type)
-    button.d-none.d-sm-inline-block.btn.btn-primary.shadow-sm(class=buttonClasses, type= type)
+mixin button(text, iconClasses, classes, type)
+    button.d-none.d-sm-inline-block.btn.btn-primary.shadow-sm(type= type, class= classes)
         i(aria-hidden='true', class=iconClasses)
         |  #{text}
 
-mixin button-link(text, iconClasses, buttonClasses, href)
-    a.d-none.d-sm-inline-block.btn.btn-primary.shadow-sm(href= href, class=buttonClasses, type= "button")
+mixin button-link(text, iconClasses, href, classes)
+    a.d-none.d-sm-inline-block.btn.btn-primary.shadow-sm(href= href, type= "button", class= classes)
         i(aria-hidden='true', class=iconClasses)
         |  #{text}
 

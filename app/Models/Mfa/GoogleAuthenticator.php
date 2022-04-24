@@ -1,10 +1,11 @@
 <?php
 
-namespace Models\MFA;
+namespace Models\Mfa;
 
 use chillerlan\QRCode\QRCode;
 use Models\Brokers\UserBroker;
 use PragmaRX\Google2FA\Google2FA;
+use Zephyrus\Application\Session;
 
 class GoogleAuthenticator
 {
@@ -29,9 +30,8 @@ class GoogleAuthenticator
         return $this->google2fa->generateSecretKey();
     }
 
-    public function validateCode($input): bool
+    public function validateCode($input, $key): bool
     {
-        $broker = new UserBroker();
-        return $this->google2fa->verifyKey($broker->getAuthKey(), $input);
+        return $this->google2fa->verifyKey($key, $input);
     }
 }

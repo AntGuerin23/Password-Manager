@@ -1,6 +1,6 @@
 <?php
 
-namespace Models\MFA;
+namespace Models\Mfa;
 
 use Models\RandomCodeGenerator;
 use Twilio\Rest\Client;

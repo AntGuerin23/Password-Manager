@@ -17,7 +17,33 @@ block content
                 .col-4.my-auto
                     +input("newPasswordConfirm", "password", "Confirm new password", "3")
 
-    +card("Activate 2FA")
+    +card("Activate MFA")
+        .row
+            .col-4
+                +card-no-header
+                    +title("Google authenticator").text-center
+                    hr
+                    .row.justify-content-center
+                        - isDisabled = activated["google"] ? "btn-info disabled" : "btn-info"
+                        +button-link("Activate", "fa-solid fa-plus", "/profile/authenticator-setup", isDisabled)
+            .col-4
+                +card-no-header
+                    +form("post", "/profile/add-email-mfa")
+                        +title("Email").text-center
+                        hr
+                        .row.justify-content-center
+                            - isDisabled = activated["email"] ? "btn-info disabled" : "btn-info"
+                            //add remove button
+                            +button("Activate", "fa-solid fa-plus", isDisabled, "submit")
+            .col-4
+                +card-no-header
+                    +form("post", "/profile/add-phone-mfa")
+                        +title("Text message").text-center
+                        hr
+                        .row.mx-1.justify-content-between
+                            +input("phone_nb", "text", "Enter a phone number", "", false)
+                            - isDisabled = activated["phone"] ? "btn-info disabled" : "btn-info"
+                            +button("Activate", "fa-solid fa-plus", isDisabled, "submit")
         //input + button (phoneNb)
         //button email -> just do it
         //button google auth -> qr code

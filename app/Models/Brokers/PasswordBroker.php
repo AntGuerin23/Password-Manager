@@ -9,7 +9,7 @@ class PasswordBroker extends Broker
 {
     public function findAllById($id)
     {
-        return $this->select("SELECT * FROM password WHERE user_id = ?", [$id]);
+        return $this->select("SELECT * FROM password WHERE user_id = ? ORDER BY id", [$id]);
     }
 
     public function insert($form)

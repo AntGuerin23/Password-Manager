@@ -1,18 +1,25 @@
 extends parents/container
 
 block content
+    +flash
     .row
         .col-6
-            +title("Setup Google Authenticator")
+            +title("Setting up Google Authenticator")
             br
             ul.m-0
                 li 1. Download the google authenticator app
                 li 2. Select "Scan a qr code"
                 li 3. Scan the qr code down below
-                li 4. Press the "Proceed" button to test if everything worked correctly
-                li 5. Google Authenticator MFA will now be registered to your account
+                li 4. Write the code display on the Google Authenticator app below
+                li 5. Press the "Proceed" button to test if everything worked correctly
+                li 6. Google Authenticator MFA will now be registered to your account
             br
-            +button-link("Proceed", "", "btn-success", "/authenticator-setup/test")
+            +form("post", "/profile/authenticator-setup/test")
+                .row
+                    .col-4
+                        +input("code", "text", "Enter 6 digit code")
+                    .col-auto
+                        +button("Proceed", "","btn-success", "submit")
         .col-auto
-            +small-card("QR Code")
+            +card("QR Code")
                 img(src=qrCode)

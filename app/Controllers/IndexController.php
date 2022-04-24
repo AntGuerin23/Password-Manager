@@ -5,7 +5,7 @@ namespace Controllers;
 use chillerlan\QRCode\QRCode;
 use Models\Brokers\PasswordBroker;
 use Models\Brokers\UserBroker;
-use Models\MFA\GoogleAuthenticator;
+use Models\Mfa\GoogleAuthenticator;
 use Models\Redirector;
 use Zephyrus\Application\Session;
 use Zephyrus\Network\Response;
@@ -54,9 +54,9 @@ class IndexController extends Controller
     {
         $broker = new PasswordBroker();
         $passwords = $broker->findAllById(Session::getInstance()->read("currentUser"));
-        $content = "sep=,\nSite,Password\n";
+        $content = "sep=,\nSite,Username,Password\n";
         foreach ($passwords as $password) {
-            $content .= "$password->domain,$password->password\n";
+            $content .= "$password->domain, $password->username, $password->password\n";
         }
         return $this->downloadContent($content, "passwords.csv", "application/CSV");
     }

@@ -5,10 +5,9 @@ mixin card(title)
         .card-body
             block
 
-mixin small-card(title)
-    .card.shadow.mb-4
-        .card-header.py-3
-            h6.m-0.font-weight-bold.text-primary= title
+
+mixin card-no-header()
+    .card.shadow.mb-4&attributes(attributes)
         .card-body
             block
 
