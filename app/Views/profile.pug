@@ -24,26 +24,36 @@ block content
                     +title("Google authenticator").text-center
                     hr
                     .row.justify-content-center
-                        - isDisabled = activated["google"] ? "btn-info disabled" : "btn-info"
-                        +button-link("Activate", "fa-solid fa-plus", "/profile/authenticator-setup", isDisabled)
+                        if activated["google"]
+                            +form("delete", "/profile/authenticator")
+                                +button("Remove", "fa-solid fa-minus", "btn-danger", "submit")
+                        else
+                            +button-link("Activate", "fa-solid fa-plus", "/profile/authenticator", "btn-info")
             .col-4
                 +card-no-header
-                    +form("post", "/profile/add-email-mfa")
                         +title("Email").text-center
                         hr
                         .row.justify-content-center
-                            - isDisabled = activated["email"] ? "btn-info disabled" : "btn-info"
-                            //add remove button
-                            +button("Activate", "fa-solid fa-plus", isDisabled, "submit")
+                            if activated["email"]
+                                +form("delete", "/profile/email-mfa")
+                                    +button("Remove", "fa-solid fa-minus", "btn-danger", "submit")
+                            else
+                                +form("post", "/profile/email-mfa")
+                                    +button("Activate", "fa-solid fa-plus", "btn-info", "submit")
+
             .col-4
                 +card-no-header
-                    +form("post", "/profile/add-phone-mfa")
-                        +title("Text message").text-center
+                        +title("Phone").text-center
                         hr
-                        .row.mx-1.justify-content-between
-                            +input("phone_nb", "text", "Enter a phone number", "", false)
-                            - isDisabled = activated["phone"] ? "btn-info disabled" : "btn-info"
-                            +button("Activate", "fa-solid fa-plus", isDisabled, "submit")
+                        if activated["phone"]
+                            .row.mx-1.justify-content-between
+                                +form("delete", "/profile/phone-mfa").mx-auto
+                                    +button("Remove", "fa-solid fa-minus", "btn-danger", "submit")
+                        else
+                            +form("post", "/profile/phone-mfa").row.mx-1.justify-content-between
+                                +input("phone_nb", "text", "Enter a phone number", "", false)
+                                +button("Activate", "fa-solid fa-plus", "btn-info", "submit")
+
         //input + button (phoneNb)
         //button email -> just do it
         //button google auth -> qr code

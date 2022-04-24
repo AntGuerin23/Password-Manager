@@ -27,16 +27,17 @@ class ProfileController extends Controller
     {
         $this->get("/profile", "profile");
         $this->put("/profile/password", "updatePassword");
-        $this->post("/profile/add-email-mfa", "setupEmailMfa");
-        $this->post("/profile/add-phone-mfa", "setupPhoneMfa");
-        $this->get("/profile/authenticator-setup", "setupAuthenticator");
-        $this->post("/profile/authenticator-setup/test", "testAuthenticator");
-
+        $this->post("/profile/email-mfa", "setupEmailMfa");
+        $this->post("/profile/phone-mfa", "setupPhoneMfa");
+        $this->get("/profile/authenticator", "setupAuthenticator");
+        $this->post("/profile/authenticator/test", "testAuthenticator");
+        $this->delete("/profile/email-mfa", "removeEmailMfa");
+        $this->delete("/profile/phone-mfa", "removePhoneMfa");
+        $this->delete("/profile/authenticator", "removeGoogleMfa");
     }
 
     public function profile()
     {
-        //TODO: Check which 2fa are activated
         $broker = new UserBroker();
         return $this->render("profile", [
             "title" => "Manage your profile",
@@ -121,6 +122,30 @@ class ProfileController extends Controller
         }
         $broker->updatePhoneNb(($form->buildObject())->phone_nb);
         Flash::success("Phone MFA has been successfully added to your account ✔️");
+        return $this->redirect("/profile");
+    }
+
+    public function removeGoogleMfa()
+    {
+        $broker = new UserBroker();
+        $broker->updateAuthKey(null);
+        Flash::info("Email Mfa has been successfully removed from your account");
+        return $this->redirect("/profile");
+    }
+
+    public function removePhoneMfa()
+    {
+        $broker = new UserBroker();
+        $broker->updatePhoneNb(null);
+        Flash::info("Email Mfa has been successfully removed from your account");
+        return $this->redirect("/profile");
+    }
+
+    public function removeEmailMfa()
+    {
+        $broker = new UserBroker();
+        $broker->updateEmailMfa(false);
+        Flash::info("Email Mfa has been successfully removed from your account");
         return $this->redirect("/profile");
     }
 }

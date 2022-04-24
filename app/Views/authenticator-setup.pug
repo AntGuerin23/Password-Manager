@@ -14,7 +14,7 @@ block content
                 li 5. Press the "Proceed" button to test if everything worked correctly
                 li 6. Google Authenticator MFA will now be registered to your account
             br
-            +form("post", "/profile/authenticator-setup/test")
+            +form("post", "/profile/authenticator/test")
                 .row
                     .col-4
                         +input("code", "text", "Enter 6 digit code")
