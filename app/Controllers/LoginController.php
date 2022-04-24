@@ -2,6 +2,7 @@
 
 namespace Controllers;
 
+use Models\Brokers\ConnectionBroker;
 use Models\Brokers\UserBroker;
 use Models\Mfa\MfaChecker;
 use Models\Redirector;
@@ -10,7 +11,9 @@ use Zephyrus\Application\Form;
 use Zephyrus\Application\Rule;
 use Zephyrus\Application\Session;
 use Zephyrus\Network\Cookie;
+use Zephyrus\Network\RemoteServer;
 use Zephyrus\Network\Response;
+use Zephyrus\Utilities\Formatter;
 
 class LoginController extends Controller
 {
@@ -98,7 +101,8 @@ class LoginController extends Controller
         Session::getInstance()->destroy();
         session_set_cookie_params(Cookie::DURATION_MONTH);
         session_start();
-        //TODO : Insert connection into bd
+        $broker = new ConnectionBroker();
+        $broker->insert();
     }
 
     private function checkIfLoginSucceeded($form): Response

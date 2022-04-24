@@ -4,10 +4,21 @@ namespace Models\Mfa;
 
 use Models\RandomCodeGenerator;
 use Twilio\Rest\Client;
+use Zephyrus\Application\Session;
 use Zephyrus\Security\Cryptography;
 
 class SmsSender extends Sender
 {
+    public static function verifySentCode($input): bool
+    {
+        return $input == Session::getInstance()->read("phoneCode");
+    }
+
+    public function sendCode($to)
+    {
+        parent::sendWithCode($to, "phoneCode");
+    }
+
     public function send($to, $text)
     {
         //TODO : Make this env variables

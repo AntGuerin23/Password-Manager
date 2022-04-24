@@ -23,3 +23,8 @@ function getImagePath($name)
             return "lock.png";
     }
 }
+
+function getCurrentDate(): string
+{
+    return date("Y-m-d H:i:s", strtotime("now"));
+}

@@ -2,10 +2,9 @@
 
 namespace Controllers;
 
-use chillerlan\QRCode\QRCode;
+use Models\Brokers\ConnectionBroker;
 use Models\Brokers\PasswordBroker;
 use Models\Brokers\UserBroker;
-use Models\Mfa\GoogleAuthenticator;
 use Models\Redirector;
 use Zephyrus\Application\Session;
 use Zephyrus\Network\Response;
@@ -18,6 +17,8 @@ class IndexController extends Controller
         if (Redirector::isForbidden(true)) {
             return $this->redirect("login");
         }
+        //TODO : if session id the same as session id in connection, update last login
+        //new ConnectionBroker())->updateLastLogin();
         return parent::before();
     }
 

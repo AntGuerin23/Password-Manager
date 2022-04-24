@@ -3,21 +3,16 @@
 namespace Models\Mfa;
 
 use Models\RandomCodeGenerator;
-use Twilio\Rest\Client;
+use Zephyrus\Application\Session;
 
 abstract class Sender
 {
-    private int $code = 0;
 
-    public function verifySentCode($input) : bool
+    protected function sendWithCode($to, $name)
     {
-        return $input == $this->code;
-    }
-
-    public function sendWithCode($to)
-    {
-        $this->code = RandomCodeGenerator::generateInt();
-        $this->send($to, "Your one-time use code : " . $this->code);
+        $code = RandomCodeGenerator::generateInt();
+        Session::getInstance()->set($name, $code);
+        $this->send($to, "Your one-time use code : " . $code);
     }
 
     abstract public function send($to, $text);

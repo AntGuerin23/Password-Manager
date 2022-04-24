@@ -3,15 +3,22 @@
 namespace Models\Mfa;
 
 use Models\Brokers\UserBroker;
+use Models\Validators\CustomRule;
 use Zephyrus\Application\Form;
 use Zephyrus\Application\Rule;
+use Zephyrus\Application\Session;
 
 class MfaChecker
 {
     public static function sendCodes()
     {
-        //send codes where it is activated
-        //save inside session
+        $broker = new UserBroker();
+        if ($broker->isPhoneMfaSet(Session::getInstance()->read("loginId"))) {
+            (new SmsSender())->sendCode($broker->getPhoneNb(Session::getInstance()->read("loginId")));
+        }
+        if ($broker->isEmailMfaSet(Session::getInstance()->read("loginId"))) {
+            (new EmailSender())->sendCode($broker->getEmail());
+        }
     }
 
     public static function verifyCodes($codes): bool
@@ -39,13 +46,14 @@ class MfaChecker
     {
         $broker = new UserBroker();
         if ($broker->isEmailMfaSet($id)) {
-            $form->field("email")->validate(Rule::notEmpty("Empty"));
+            $form->field("email")->validate(CustomRule::emailCodeValid());
         }
         if ($broker->isPhoneMfaSet($id)) {
-            $form->field("phone")->validate(Rule::notEmpty("Empty"));
+            $form->field("phone")->validate(CustomRule::phoneCodeValid());
         }
-        if ($broker->isEmailMfaSet($id)) {
-            $form->field("google")->validate(Rule::notEmpty("Empty"));
+        if ($broker->isGoogleMfaSet($id)) {
+            $broker = new UserBroker();
+            $form->field("google")->validate(CustomRule::googleCodeValid($broker->getAuthKey(Session::getInstance()->read("loginId"))));
         }
         return $form;
     }

@@ -1,9 +1,10 @@
 <?php namespace Models\Validators;
 
 use Models\Brokers\UserBroker;
+use Models\Mfa\EmailSender;
 use Models\Mfa\GoogleAuthenticator;
+use Models\Mfa\SmsSender;
 use Zephyrus\Application\Rule;
-use Zephyrus\Application\Session;
 use Zephyrus\Security\Cryptography;
 
 class CustomRule
@@ -16,10 +17,24 @@ class CustomRule
         }, $errorMessage);
     }
 
-    public static function googleCodeValid(string $key, string $errorMessage = "The provided authentication code is not valid"): Rule
+    public static function googleCodeValid(string $key, string $errorMessage = "The Google authentication code is incorrect"): Rule
     {
         return new Rule(function ($data) use ($key) {
-            return (new GoogleAuthenticator)->validateCode($data, $key);
+            return (new GoogleAuthenticator)->validateCode(str_replace(" ", "", $data), $key);
+        }, $errorMessage);
+    }
+
+    public static function emailCodeValid(string $errorMessage = "The email authentication code is incorrect"): Rule
+    {
+        return new Rule(function ($data) {
+            return EmailSender::verifySentCode($data);
+        }, $errorMessage);
+    }
+
+    public static function phoneCodeValid(string $errorMessage = "The phone authentication code is incorrect"): Rule
+    {
+        return new Rule(function ($data) {
+            return SmsSender::verifySentCode($data);
         }, $errorMessage);
     }
 }

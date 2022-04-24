@@ -40,7 +40,6 @@ block content
                             else
                                 +form("post", "/profile/email-mfa")
                                     +button("Activate", "fa-solid fa-plus", "btn-info", "submit")
-
             .col-4
                 +card-no-header
                         +title("Phone").text-center
@@ -53,10 +52,6 @@ block content
                             +form("post", "/profile/phone-mfa").row.mx-1.justify-content-between
                                 +input("phone_nb", "text", "Enter a phone number", "", false)
                                 +button("Activate", "fa-solid fa-plus", "btn-info", "submit")
-
-        //input + button (phoneNb)
-        //button email -> just do it
-        //button google auth -> qr code
 
     +card("Active Connections")
          +title("No active connections")

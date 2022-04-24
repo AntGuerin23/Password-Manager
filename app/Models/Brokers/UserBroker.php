@@ -95,4 +95,10 @@ class UserBroker extends Broker
         $result = $this->findById(Session::getInstance()->read("currentUser"));
         return $result->email;
     }
+
+    public function getPhoneNb($id)
+    {
+        $result = $this->findById($id);
+        return $result->phone_nb;
+    }
 }
