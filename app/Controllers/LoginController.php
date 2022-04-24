@@ -96,13 +96,13 @@ class LoginController extends Controller
         }
     }
 
-    private function rememberUser()
+    private function rememberUser($id)
     {
         Session::getInstance()->destroy();
         session_set_cookie_params(Cookie::DURATION_MONTH);
         session_start();
         $broker = new ConnectionBroker();
-        $broker->insert();
+        $broker->insert($id);
     }
 
     private function checkIfLoginSucceeded($form): Response
@@ -136,10 +136,10 @@ class LoginController extends Controller
 
     private function configureSession($remember, $id)
     {
-        if ($remember) {
-            $this->rememberUser();
-        }
         Session::getInstance()->refresh();
+        if ($remember) {
+            $this->rememberUser($id);
+        }
         Session::getInstance()->set("currentUser", $id);
     }
 

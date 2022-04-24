@@ -18,6 +18,7 @@ class IndexController extends Controller
             return $this->redirect("login");
         }
         //TODO : if session id the same as session id in connection, update last login
+        //Session::getInstance()->getId();
         //new ConnectionBroker())->updateLastLogin();
         return parent::before();
     }
@@ -48,6 +49,7 @@ class IndexController extends Controller
     public function logout()
     {
         Session::getInstance()->remove("currentUser");
+        $this->removeConnection();
         return $this->redirect("/");
     }
 
@@ -60,5 +62,13 @@ class IndexController extends Controller
             $content .= "$password->domain, $password->username, $password->password\n";
         }
         return $this->downloadContent($content, "passwords.csv", "application/CSV");
+    }
+
+    private function removeConnection() {
+        $broker = new ConnectionBroker();
+        $connection = $broker->getActiveConnection();
+        if ($connection != null) {
+            $broker->delete($connection);
+        }
     }
 }

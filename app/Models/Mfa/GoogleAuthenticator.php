@@ -32,6 +32,7 @@ class GoogleAuthenticator
 
     public function validateCode($input, $key): bool
     {
+        $this->google2fa->setWindow(30);
         return $this->google2fa->verifyKey($key, $input);
     }
 }
