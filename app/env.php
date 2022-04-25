@@ -25,6 +25,9 @@ define('DEFAULT_SESSION_SAVE_PATH', Session::DEFAULT_SAVE_PATH);
 define('DB_USERNAME', getenv('DB_USERNAME'));
 define('DB_PASSWORD', getenv('DB_PASSWORD'));
 define('DB', getenv('DB'));
+define('TWILIO_ID', getenv('TWILIO_ID'));
+define('TWILIO_TOKEN', getenv('TWILIO_TOKEN'));
+define('TWILIO_NUMBER', getenv('TWILIO_NUMBER'));
 
 // Database or application level encryption should absolutely have its key in the server environnement.
 define('ENCRYPTION_KEY', getenv('ENCRYPTION_KEY'));
