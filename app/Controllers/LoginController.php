@@ -35,7 +35,6 @@ class LoginController extends Controller
 
     public function login(): Response
     {
-        Session::getInstance()->restart();
         return $this->render("login", [
             "title" => "Login",
         ]);

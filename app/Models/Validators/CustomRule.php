@@ -37,4 +37,18 @@ class CustomRule
             return SmsSender::verifySentCode($data);
         }, $errorMessage);
     }
+
+    public static function usernameDoesntExist(string $errorMessage = "This username is already taken")
+    {
+        return new Rule(function ($data) {
+            return !(new UserBroker())->isUsernameTaken($data);
+        }, $errorMessage);
+    }
+
+    public static function emailDoesntExist(string $errorMessage = "This email is already taken")
+    {
+        return new Rule(function ($data) {
+            return !(new UserBroker())->isEmailTaken($data);
+        }, $errorMessage);
+    }
 }

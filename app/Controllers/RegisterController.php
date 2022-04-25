@@ -4,6 +4,7 @@ namespace Controllers;
 
 use Models\Brokers\UserBroker;
 use Models\Redirector;
+use Models\Validators\CustomRule;
 use Zephyrus\Application\Flash;
 use Zephyrus\Application\Form;
 use Zephyrus\Application\Rule;
@@ -35,7 +36,6 @@ class RegisterController extends Controller
     public function createUser(): Response
     {
         $form = $this->buildRegisterForm();
-        //TODO : Check if both email and username already exist (custom rule)
         if ($this->tryRegister($form)) {
             return $this->redirect("/login");
         }
@@ -46,7 +46,8 @@ class RegisterController extends Controller
     {
         $form = $this->buildForm();
         $form->field("email")->validate(Rule::email("Please enter a valid email"));
-        $form->field("username")->validate(Rule::notEmpty("Please enter a username"));
+        $form->field("email")->validate(CustomRule::emailDoesntExist());
+        $form->field("username")->validate(CustomRule::usernameDoesntExist());
         $form->field("password")->validate(Rule::passwordCompliant("Password must contain at least one uppercase, one lowercase and one number (8 chars min)"));
         $form->field("password-confirm")->validate(Rule::sameAs("password", "The two passwords do not match"));
         return $form;

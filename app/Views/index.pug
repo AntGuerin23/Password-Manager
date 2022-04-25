@@ -6,7 +6,7 @@ block content
     .d-sm-flex.align-items-center.justify-content-between.mb-4
         h1.h3.mb-0.text-gray-800 See Your Passwords
     .col-10
-        +flash()
+        +flash
         -empty = true
         each password in passwords
             -empty = false

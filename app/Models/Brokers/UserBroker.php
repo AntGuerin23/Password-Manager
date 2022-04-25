@@ -101,4 +101,14 @@ class UserBroker extends Broker
         $result = $this->findById($id);
         return $result->phone_nb;
     }
+
+    public function isEmailTaken($email) {
+        $result = $this->selectSingle("SELECT * FROM \"user\" WHERE email = ?", [$email]);
+        return !is_null($result);
+    }
+
+    public function isUsernameTaken($username) {
+        $result = $this->selectSingle("SELECT * FROM \"user\" WHERE username = ?", [$username]);
+        return !is_null($result);
+    }
 }
