@@ -1,4 +1,4 @@
-mixin input(name, type, placeholder, tabIndex, refill)
+mixin input(name, type, placeholder, tabIndex, refill, autocomplete, id)
     - value = ""
     if refill === undefined || refill === true
         - value = val(name, "")
@@ -6,7 +6,7 @@ mixin input(name, type, placeholder, tabIndex, refill)
     if value !== ""
         - validity = "is-valid"
     .form-group.my-auto
-        input.form-control.form-control-user(name=name type=type placeholder=placeholder tabIndex= tabIndex value=value class=validity)
+        input.form-control.form-control-user(name=name type=type placeholder=placeholder tabIndex= tabIndex value=value class=validity autocomplete= autocomplete, id= id)
 
 mixin input-hidden(name, value)
     .form-group.my-auto

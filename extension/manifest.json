@@ -4,18 +4,13 @@
   "version": "0.1",
   "content_scripts": [
   {
-    "matches": ["https://*/*"],
+    "matches": ["*://*/*"],
     "js": ["vendor/jquery.min.js", "app.js"]
   }],
-  "web_accessible_resources": [{
-  "resources": ["data.php"],
-  "matches": ["https://*/*"]
-}],
   "background" : {
     "service_worker" : "background.js"
   },
   "action": {
-    "default_title" : "Click me!",
     "default_popup" : "popup.html"
   },
   "permissions": [

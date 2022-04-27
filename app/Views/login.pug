@@ -16,9 +16,9 @@ block body
                                             .text-center
                                                 h1.h4.text-gray-900.mb-4 Login
                                             +form("post", "/login").user
-                                                +input("username", "text", "Enter username")
+                                                +input("username", "text", "Enter username", "", false, "username")
                                                 br
-                                                +input("password", "password", "Password")
+                                                +input("password", "password", "Password", "", false, "current-password")
                                                 br
                                                 .custom-control.custom-checkbox.small
                                                     input#customCheck.custom-control-input(type='checkbox', name="remember")
@@ -29,6 +29,6 @@ block body
                                                     | Login
                                             hr
                                             .text-center
-                                                a.small(href="forgot-password") Forgot password ?
+                                                a.small(href="/login/forgot") Forgot password ?
                                             .text-center
-                                                a.small(href="register") Create an Account
+                                                a.small(href="/register") Create an Account

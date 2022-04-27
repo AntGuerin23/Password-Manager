@@ -47,9 +47,9 @@ class RegisterController extends Controller
         $form = $this->buildForm();
         $form->field("email")->validate(Rule::email("Please enter a valid email"));
         $form->field("email")->validate(CustomRule::emailDoesntExist());
-        $form->field("username")->validate(CustomRule::usernameDoesntExist());
-        $form->field("password")->validate(Rule::passwordCompliant("Password must contain at least one uppercase, one lowercase and one number (8 chars min)"));
-        $form->field("password-confirm")->validate(Rule::sameAs("password", "The two passwords do not match"));
+        $form->field("newUsername")->validate(CustomRule::usernameDoesntExist());
+        $form->field("newPassword")->validate(Rule::passwordCompliant("Password must contain at least one uppercase, one lowercase and one number (8 chars min)"));
+        $form->field("password-confirm")->validate(Rule::sameAs("newPassword", "The two passwords do not match"));
         return $form;
     }
 

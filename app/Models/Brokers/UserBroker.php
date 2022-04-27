@@ -17,16 +17,16 @@ class UserBroker extends Broker
     public function insert(stdClass $client): int
     {
         $this->query("INSERT INTO \"user\"(username, email, password, email_mfa) VALUES (?, ?, ?, false)", [
-            $client->username,
+            $client->newUsername,
             $client->email,
-            Cryptography::hashPassword($client->password)
+            Cryptography::hashPassword($client->newPassword)
         ]);
         return $this->getDatabase()->getLastInsertedId();
     }
 
-    public function tryAuthenticating($email, $password): int|null
+    public function tryAuthenticating($username, $password): int|null
     {
-        $user = $this->selectSingle("SELECT * FROM \"user\" WHERE username  = ?", [$email]);
+        $user = $this->selectSingle("SELECT * FROM \"user\" WHERE username  = ?", [$username]);
         if ($user == null) return null;
         if (Cryptography::verifyHashedPassword($password, $user->password)) {
             return $user->id;
@@ -35,9 +35,12 @@ class UserBroker extends Broker
         }
     }
 
-    public function updatePassword($newPassword)
+    public function updatePassword($newPassword, $id = null)
     {
-        $this->query("UPDATE \"user\" SET password = ? WHERE id = ?", [Cryptography::hashPassword($newPassword), Session::getInstance()->read("currentUser")]);
+        if ($id == null) {
+            $id = Session::getInstance()->read("currentUser");
+        }
+        $this->query("UPDATE \"user\" SET password = ? WHERE id = ?", [Cryptography::hashPassword($newPassword), $id]);
     }
 
     public function updateAuthKey($key)
@@ -90,9 +93,9 @@ class UserBroker extends Broker
         return $result->google_auth_key;
     }
 
-    public function getEmail()
+    public function getEmail($id)
     {
-        $result = $this->findById(Session::getInstance()->read("currentUser"));
+        $result = $this->findById($id);
         return $result->email;
     }
 
@@ -102,13 +105,20 @@ class UserBroker extends Broker
         return $result->phone_nb;
     }
 
-    public function isEmailTaken($email) {
+    public function isEmailTaken($email)
+    {
         $result = $this->selectSingle("SELECT * FROM \"user\" WHERE email = ?", [$email]);
         return !is_null($result);
     }
 
-    public function isUsernameTaken($username) {
+    public function isUsernameTaken($username)
+    {
         $result = $this->selectSingle("SELECT * FROM \"user\" WHERE username = ?", [$username]);
         return !is_null($result);
+    }
+
+    public function findByEmail($email)
+    {
+        return $this->selectSingle("SELECT * FROM \"user\" WHERE email  = ?", [$email])->id;
     }
 }

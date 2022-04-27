@@ -17,7 +17,7 @@ class MfaChecker
             (new SmsSender())->sendCode($broker->getPhoneNb(Session::getInstance()->read("loginId")));
         }
         if ($broker->isEmailMfaSet(Session::getInstance()->read("loginId"))) {
-            (new EmailSender())->sendCode($broker->getEmail());
+            (new EmailSender())->sendCode($broker->getEmail(Session::getInstance()->read("loginId")), "Your SosPass authentication code");
         }
     }
 

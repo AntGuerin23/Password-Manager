@@ -21,7 +21,7 @@ class GoogleAuthenticator
         $broker = new UserBroker();
         return (new QRCode())->render($this->google2fa->getQRCodeUrl(
             'SosPass',
-            $broker->getEmail(),
+            $broker->getEmail(Session::getInstance()->read("currentUser")),
             $key));
     }
 

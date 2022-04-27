@@ -1,23 +1,32 @@
-//authentify on SosPass, using popop on top right, store id
 $(window).on("load", test)
 
-const userId = 3
+async function test() {
 
-function test() {
-    chrome.storage.sync.get("loginInfo", (storage) => {
-        const {username, password} = JSON.parse(storage.loginInfo)
-        console.log(storage)
-        //TODO: Get domain, autocomplete depending on storage
-        if (domContainsLogin()) {
-            $("[autocomplete='username']").val(username)
-            $("[autocomplete='current-password']").val(password)
-        }
+    if (domContainsLogin()) {
+        const response = await callApi()
+        console.log(response)
+        $("[autocomplete='username']").val(response.username)
+        $("[autocomplete='current-password']").val(response.password)
+    }
+}
+
+async function callApi() {
+    //todo : get connection token from storage
+    const auth = {
+        //put token here
+        username: "bob",
+        password: "bruh",
+        domain: window.location.hostname
+    }
+    return await fetch("http://password.local/api/passwords", {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(auth)
     })
-
-    //if current domain contains domain inside password list, then auto complete :
-    //window.location.hostname
+        .then(response => response.text())
+        .then(response => JSON.parse(JSON.parse(response)))
 }
 
 function domContainsLogin() {
-    return $("[autocomplete='username']").length && $("[autocomplete='current-password']".length)
+    return $("[autocomplete='username']").length || $("[autocomplete='current-password']".length)
 }

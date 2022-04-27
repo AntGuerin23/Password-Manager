@@ -6,6 +6,7 @@ use Models\Brokers\ConnectionBroker;
 use Models\Brokers\PasswordBroker;
 use Models\Brokers\UserBroker;
 use Models\ConnectionUpdater;
+use Models\Mfa\EmailSender;
 use Models\Redirector;
 use Zephyrus\Application\Session;
 use Zephyrus\Network\Response;
@@ -51,7 +52,7 @@ class IndexController extends Controller
         $passwords = (new PasswordBroker())->findAllById(Session::getInstance()->read("currentUser"));
         $content = "sep=,\nSite,Username,Password\n";
         foreach ($passwords as $password) {
-            $content .= "$password->domain, $password->username, $password->password\n";
+            $content .= "$password->domain,$password->username,$password->password\n";
         }
         return $this->downloadContent($content, "passwords.csv", "application/CSV");
     }

@@ -45,7 +45,8 @@ class PasswordController extends Controller
     {
         $form = $this->buildForm();
         $form->field("appName")->validate(Rule::notEmpty("Please enter the application name"));
-        $form->field("password")->validate(Rule::notEmpty("Please enter a password"));
+        $form->field("sitePassword")->validate(Rule::notEmpty("Please enter a password"));
+        $form->field("siteUsername")->validate(Rule::notEmpty("Please enter a username"));
         if (!$form->verify()) {
             Flash::error($form->getErrorMessages());
             return $this->redirect("/add-password");

@@ -12,7 +12,8 @@
     "zephyrus/zephyrus": "1.4.*",
     "twilio/sdk": "^6.36",
     "pragmarx/google2fa": "^8.0",
-    "chillerlan/php-qrcode": "^4.3"
+    "chillerlan/php-qrcode": "^4.3",
+    "sendgrid/sendgrid": "^7.11"
   },
   "require-dev": {
     "phpunit/phpunit": "9.*.*"

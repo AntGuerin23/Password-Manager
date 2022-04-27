@@ -18,11 +18,11 @@ block body
                                             +form("post", "register").user
                                                 +input("email", "email", "Email")
                                                 br
-                                                +input("username", "text", "Username")
+                                                +input("newUsername", "text", "Username")
                                                 br
                                                 .row
                                                     .col-6
-                                                        +input("password", "password", "Password")
+                                                        +input("newPassword", "password", "Password", "", "", "", "passwordInput")
 
                                                     .col-6
                                                         +input("password-confirm", "password", "Confirm password")

@@ -15,7 +15,7 @@ class PasswordBroker extends Broker
     public function insert($form)
     {
         //TODO : Encrypt
-        $this->query("INSERT INTO password (user_id, domain, username, password) VALUES (?, ?, ?, ?)", [Session::getInstance()->read("currentUser"), $form->appName, $form->username, $form->password]);
+        $this->query("INSERT INTO password (user_id, domain, username, password) VALUES (?, ?, ?, ?)", [Session::getInstance()->read("currentUser"), $form->appName, $form->siteUsername, $form->sitePassword]);
     }
 
     public function delete($id)
@@ -27,5 +27,10 @@ class PasswordBroker extends Broker
     {
         //TODO : Encrypt
         $this->query("UPDATE password SET password = ? WHERE id = ?", [$password, $id]);
+    }
+
+    public function findByDomain($user_id, $domain) {
+        //TODO :Decrypt
+        return $this->selectSingle("SELECT username, password FROM password WHERE user_id = ? AND domain LIKE '%' || ? || '%' ORDER BY id", [$user_id, $domain]);
     }
 }

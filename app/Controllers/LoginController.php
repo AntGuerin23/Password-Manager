@@ -4,6 +4,7 @@ namespace Controllers;
 
 use Models\Brokers\ConnectionBroker;
 use Models\Brokers\UserBroker;
+use Models\Mfa\EmailSender;
 use Models\Mfa\MfaChecker;
 use Models\Redirector;
 use Zephyrus\Application\Flash;
@@ -11,9 +12,7 @@ use Zephyrus\Application\Form;
 use Zephyrus\Application\Rule;
 use Zephyrus\Application\Session;
 use Zephyrus\Network\Cookie;
-use Zephyrus\Network\RemoteServer;
 use Zephyrus\Network\Response;
-use Zephyrus\Utilities\Formatter;
 
 class LoginController extends Controller
 {

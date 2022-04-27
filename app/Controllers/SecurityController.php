@@ -38,13 +38,13 @@ abstract class SecurityController extends ZephyrusBaseController
         /**
          * Uncomment to send the CSP security headers. Edit the method to reflect the project's needs.
          */
-        //$this->applyContentSecurityPolicies();
+        $this->applyContentSecurityPolicies();
 
         /**
          * Uncomment to sent basic CORS header (Access-Control-Allow-Origin: *) to allow any domains for cross origin
          * resource sharing. Edit method for more refined properties using the CrossOriginResourcePolicy class.
          */
-        //$this->applyCrossOriginResourceSharing();
+        $this->applyCrossOriginResourceSharing();
 
         /**
          * May throw an UnauthorizedAccessException, InvalidCsrfException or IntrusionDetectionException. Exception can
@@ -156,13 +156,13 @@ abstract class SecurityController extends ZephyrusBaseController
     private function applyContentSecurityPolicies()
     {
         $csp = new ContentSecurityPolicy();
-        $csp->setDefaultSources(["'self'"]);
-        $csp->setFontSources(["'self'", 'https://fonts.googleapis.com', 'https://fonts.gstatic.com']);
+        $csp->setDefaultSources(["'self'", "https://ka-f.fontawesome.com"]);
+        $csp->setFontSources(["'self'", 'https://fonts.googleapis.com', 'https://fonts.gstatic.com', "https://kit.fontawesome.com", "https://ka-f.fontawesome.com"]);
         $csp->setStyleSources(["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com']);
         $csp->setScriptSources(["'self'", 'https://ajax.googleapis.com', 'https://maps.googleapis.com',
-            'https://www.google-analytics.com', 'http://connect.facebook.net']);
+            'https://www.google-analytics.com', 'http://connect.facebook.net', "https://kit.fontawesome.com"]);
         $csp->setChildSources(["'self'", 'http://staticxx.facebook.com']);
-        $csp->setImageSources(["'self'", 'data:']);
+        $csp->setImageSources(["'self'", 'data:', "static.vecteezy.com"]);
         $csp->setBaseUri([$this->request->getBaseUrl()]);
 
         /**

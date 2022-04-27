@@ -16,12 +16,11 @@ class SmsSender extends Sender
 
     public function sendCode($to)
     {
-        parent::sendWithCode($to, "phoneCode");
+        parent::sendWithCode($to, "phoneCode", "Your SosPass authentication code : ");
     }
 
-    public function send($to, $text)
+    public function send($to, $text, $code)
     {
-        //TODO : Make this env variables
         $account_sid = TWILIO_ID;
         $auth_token = TWILIO_TOKEN;
         $twilio_number = TWILIO_NUMBER;
@@ -30,7 +29,7 @@ class SmsSender extends Sender
             $to,
             array(
                 'from' => $twilio_number,
-                'body' => $text
+                'body' => $text + $code
             )
         );
     }
