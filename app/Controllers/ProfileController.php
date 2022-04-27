@@ -27,12 +27,12 @@ class ProfileController extends Controller
 
     public function initializeRoutes()
     {
-        $this->get("/profile", "profile");
+        $this->get("/profile", "profilePage");
         $this->put("/profile/password", "updatePassword");
         $this->delete("/profile/connection/{id}", "deleteConnection");
     }
 
-    public function profile(): Response
+    public function profilePage(): Response
     {
         return $this->render("profile", [
             "title" => "Manage your profile",

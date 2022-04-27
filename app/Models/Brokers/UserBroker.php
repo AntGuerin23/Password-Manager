@@ -14,12 +14,13 @@ class UserBroker extends Broker
         return $this->selectSingle("SELECT * FROM \"user\" WHERE id  = ?", [$id]);
     }
 
-    public function insert(stdClass $client): int
+    public function insertUsingSession(): int
     {
+        $session = Session::getInstance();
         $this->query("INSERT INTO \"user\"(username, email, password, email_mfa) VALUES (?, ?, ?, false)", [
-            $client->newUsername,
-            $client->email,
-            Cryptography::hashPassword($client->newPassword)
+            $session->read("newUsername"),
+            $session->read("email"),
+            Cryptography::hashPassword($session->read("newPassword"))
         ]);
         return $this->getDatabase()->getLastInsertedId();
     }

@@ -25,13 +25,13 @@ class PasswordController extends Controller
 
     public function initializeRoutes()
     {
-        $this->get("/add-password", "addPassword");
+        $this->get("/add-password", "addPasswordPage");
         $this->post("/password", "insertPassword");
         $this->delete("/password/{id}", "deletePassword");
         $this->put("/password/{id}", "updatePassword");
     }
 
-    public function addPassword()
+    public function addPasswordPage()
     {
         $broker = new UserBroker();
         return $this->render("add-password", [

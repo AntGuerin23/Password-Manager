@@ -26,13 +26,13 @@ class LoginController extends Controller
 
     public function initializeRoutes()
     {
-        $this->get("/login", "login");
+        $this->get("/login", "loginPage");
         $this->post("/login", "authenticate");
-        $this->get("/login/mfa", "mfa");
+        $this->get("/login/mfa", "mfaPage");
         $this->post("/login/mfa", "validateMfa");
     }
 
-    public function login(): Response
+    public function loginPage(): Response
     {
         return $this->render("login", [
             "title" => "Login",
@@ -49,7 +49,7 @@ class LoginController extends Controller
         return $this->checkIfLoginSucceeded($form);
     }
 
-    public function mfa(): Response
+    public function mfaPage(): Response
     {
         if (!Session::getInstance()->has("remember") || !Session::getInstance()->has("loginId")) {
             return $this->redirect("/login");

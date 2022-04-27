@@ -25,12 +25,12 @@ class IndexController extends Controller
 
     public function initializeRoutes()
     {
-        $this->get("/", "index");
+        $this->get("/", "indexPage");
         $this->delete("/login", "logout");
         $this->get("/passwords", "export");
     }
 
-    public function index(): Response
+    public function indexPage(): Response
     {
         return $this->render("index", [
             "title" => "See your passwords",

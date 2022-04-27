@@ -13,9 +13,9 @@ block body
                                     .col
                                         .p-5
                                             .text-center
-                                                h1.h4.text-gray-900.mb-4 Forgot password ?
-                                            +form("post", "/login/forgot").user
-                                                +input("passwordResetEmail", "text", "Enter your email address")
+                                                h1.h4.text-gray-900.mb-4 Email Confirmation
+                                            +form("post", "/register/confirm-email").user
+                                                +input("confirmCode", "text", "Enter the code you have just received by email")
                                                 br
                                                 button.btn.btn-primary.btn-user.btn-block(type='submit')
-                                                    | Send verification code
+                                                    | Reset password

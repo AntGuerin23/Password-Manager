@@ -26,14 +26,14 @@ class MfaController extends Controller
     {
         $this->post("/profile/email-mfa", "setupEmailMfa");
         $this->post("/profile/phone-mfa", "setupPhoneMfa");
-        $this->get("/profile/authenticator", "setupAuthenticator");
+        $this->get("/profile/authenticator", "setupAuthenticatorPage");
         $this->post("/profile/authenticator/test", "testAuthenticator");
         $this->delete("/profile/email-mfa", "removeEmailMfa");
         $this->delete("/profile/phone-mfa", "removePhoneMfa");
         $this->delete("/profile/authenticator", "removeGoogleMfa");
     }
 
-    public function setupAuthenticator(): Response
+    public function setupAuthenticatorPage(): Response
     {
         if ((new UserBroker())->isGoogleMfaSet(Session::getInstance()->read("currentUser"))) {
             Flash::error("You already have added this MFA method ❌");
