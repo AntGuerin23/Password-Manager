@@ -19,7 +19,6 @@ class IndexController extends Controller
         if (Redirector::isForbidden(true)) {
             return $this->redirect("login");
         }
-        ConnectionUpdater::update();
         return parent::before();
     }
 

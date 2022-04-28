@@ -2,7 +2,7 @@
 
 namespace Models\Brokers;
 
-use stdClass;
+use Models\SessionHelper;
 use Zephyrus\Application\Session;
 use Zephyrus\Security\Cryptography;
 

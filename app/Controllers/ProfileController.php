@@ -62,8 +62,8 @@ class ProfileController extends Controller
     public function deleteConnection($id): Response
     {
         $broker = new ConnectionBroker();
-        $broker->delete($id);
         Flash::success("Connection has been successfully closed ✔️");
+        $broker->updateConnectionStatus(true, $id);
         return $this->redirect("/profile");
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Controllers;
 
+use Models\Brokers\PasswordBroker;
 use Models\Brokers\UserBroker;
 use Models\Mfa\EmailSender;
 use Models\Redirector;
@@ -32,6 +33,7 @@ class PasswordResetController extends Controller
 
     public function forgotPasswordPage(): Response
     {
+        Flash::warning("By resetting your account password, you will lose every password you've registered up until today.");
         return $this->render("forgot-password", [
             "title" => "Forgot password"
         ]);
@@ -89,9 +91,11 @@ class PasswordResetController extends Controller
         }
         Session::getInstance()->remove("emailCode");
         $broker = new UserBroker();
-        $broker->updatePassword($form->buildObject()->passwordReset, $broker->findByEmail(Session::getInstance()->read("passwordResetEmail")));
+        $id = $broker->findByEmail(Session::getInstance()->read("passwordResetEmail"));
+        $broker->updatePassword($form->buildObject()->passwordReset, $id);
+        (new PasswordBroker())->deleteForUser($id);
         Session::getInstance()->remove("passwordResetEmail");
-        Flash::success("Your password has been successfully updated  ✔️");
+        Flash::warning("Your account password has been successfully updated, but your stored passwords have been deleted for security purposes");
         return $this->redirect("/login");
     }
 }

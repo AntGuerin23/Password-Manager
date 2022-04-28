@@ -1,5 +1,10 @@
 <?php namespace Controllers;
 
+use Models\Brokers\ConnectionBroker;
+use Models\Brokers\UserBroker;
+use Models\ConnectionUpdater;
+use Zephyrus\Application\Flash;
+use Zephyrus\Application\Session;
 use Zephyrus\Network\Response;
 
 /**
@@ -41,6 +46,16 @@ abstract class Controller extends SecurityController
      */
     public function before(): ?Response
     {
+        ConnectionUpdater::update();
+        $broker = new ConnectionBroker();
+        $connection = $broker->findBySessionId();
+        if ($connection != null && $broker->isDisconnected($connection->id)) {
+            var_dump("here");
+            Session::getInstance()->destroy();
+            $broker->delete($connection->id);
+            Flash::warning("You have been disconnected");
+            return $this->redirect("/login");
+        }
         return parent::before();
     }
 

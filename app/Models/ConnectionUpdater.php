@@ -9,9 +9,8 @@ class ConnectionUpdater
 {
     public static function update()
     {
-        $session_id = Session::getInstance()->getId();
         $broker = new ConnectionBroker();
-        $connection = $broker->getActiveConnection();
+        $connection = $broker->getActiveConnectionId();
         if (!is_null($connection)) {
             $broker->updateLastLogin($connection);
         }
@@ -19,7 +18,7 @@ class ConnectionUpdater
 
     public static function disconnect() {
         $broker = new ConnectionBroker();
-        $connection = $broker->getActiveConnection();
+        $connection = $broker->getActiveConnectionId();
         if ($connection != null) {
             $broker->delete($connection);
         }

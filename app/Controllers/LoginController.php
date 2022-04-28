@@ -13,6 +13,7 @@ use Zephyrus\Application\Rule;
 use Zephyrus\Application\Session;
 use Zephyrus\Network\Cookie;
 use Zephyrus\Network\Response;
+use Zephyrus\Security\Cryptography;
 
 class LoginController extends Controller
 {
@@ -71,6 +72,7 @@ class LoginController extends Controller
         }
         Session::getInstance()->remove("codesWereSent");
         $this->configureSession(Session::getInstance()->read("remember"), Session::getInstance()->read("loginId"));
+        Session::getInstance()->set("userKey", Cryptography::deriveEncryptionKey($newForm->buildObject()->password, USER_KEY_SALT));
         return $this->redirect("/");
     }
 
@@ -121,6 +123,7 @@ class LoginController extends Controller
             return $this->redirect("login/mfa");
         }
         $this->configureSession($this->checkForRemember($loginInfo), $id);
+        Session::getInstance()->set("userKey", Cryptography::deriveEncryptionKey($loginInfo->password, USER_KEY_SALT));
         return $this->redirect("/");
     }
 

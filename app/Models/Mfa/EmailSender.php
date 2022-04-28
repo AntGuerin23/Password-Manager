@@ -20,7 +20,7 @@ class EmailSender extends Sender
 
     public function send($to, $text, $body)
     {
-        $key = "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";
+        $key = getenv("SENDGRID_KEY");
         $email = new Mail();
         $email->setFrom("pigggy23@gmail.com", "SosPass");
         $email->setSubject($text);
@@ -32,7 +32,5 @@ class EmailSender extends Sender
         } catch (Exception $e) {
             echo 'Caught exception: '. $e->getMessage() ."\n";
         }
-        //save as emailCode in session
-        // TODO: Implement send() method.
     }
 }

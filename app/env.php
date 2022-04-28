@@ -28,6 +28,7 @@ define('DB', getenv('DB'));
 define('TWILIO_ID', getenv('TWILIO_ID'));
 define('TWILIO_TOKEN', getenv('TWILIO_TOKEN'));
 define('TWILIO_NUMBER', getenv('TWILIO_NUMBER'));
+define('USER_KEY_SALT', getenv('USER_KEY_SALT'));
 
 // Database or application level encryption should absolutely have its key in the server environnement.
 define('ENCRYPTION_KEY', getenv('ENCRYPTION_KEY'));
