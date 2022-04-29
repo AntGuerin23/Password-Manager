@@ -50,7 +50,6 @@ abstract class Controller extends SecurityController
         $broker = new ConnectionBroker();
         $connection = $broker->findBySessionId();
         if ($connection != null && $broker->isDisconnected($connection->id)) {
-            var_dump("here");
             Session::getInstance()->destroy();
             $broker->delete($connection->id);
             Flash::warning("You have been disconnected");

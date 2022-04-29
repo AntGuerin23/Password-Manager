@@ -6,6 +6,7 @@ use Models\Mfa\GoogleAuthenticator;
 use Models\Mfa\SmsSender;
 use Zephyrus\Application\Rule;
 use Zephyrus\Security\Cryptography;
+use function PHPUnit\Framework\isNull;
 
 class CustomRule
 {

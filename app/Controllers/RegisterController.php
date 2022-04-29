@@ -32,6 +32,7 @@ class RegisterController extends Controller
 
     public function registerPage(): Response
     {
+        Flash::warning("WARNING : Do not forget your password, if you do, you can retrieve it, but everything in your account will be DELETED");
         return $this->render("register", [
             "title" => "Register"
         ]);

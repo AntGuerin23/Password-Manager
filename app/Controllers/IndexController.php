@@ -41,8 +41,8 @@ class IndexController extends Controller
 
     public function logout(): Response
     {
-        Session::getInstance()->restart();
         ConnectionUpdater::disconnect();
+        Session::getInstance()->restart();
         return $this->redirect("/");
     }
 

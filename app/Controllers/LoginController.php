@@ -98,10 +98,10 @@ class LoginController extends Controller
 
     private function rememberUser($id)
     {
+        $broker = new ConnectionBroker();
         Session::getInstance()->destroy();
         session_set_cookie_params(Cookie::DURATION_MONTH);
         session_start();
-        $broker = new ConnectionBroker();
         $broker->insert($id);
     }
 
@@ -117,12 +117,12 @@ class LoginController extends Controller
 
     private function redirectDependingOnMfa($id, $loginInfo)
     {
+        Session::getInstance()->set("loginId", $id);
+        Session::getInstance()->set("remember", $this->checkForRemember($loginInfo));
         if (MfaChecker::hasActivatedMethods($id)) {
-            Session::getInstance()->set("loginId", $id);
-            Session::getInstance()->set("remember", $this->checkForRemember($loginInfo));
             return $this->redirect("login/mfa");
         }
-        $this->configureSession($this->checkForRemember($loginInfo), $id);
+        $this->configureSession(Session::getInstance()->read("remember"), Session::getInstance()->read("loginId"));
         Session::getInstance()->set("userKey", Cryptography::deriveEncryptionKey($loginInfo->password, USER_KEY_SALT));
         return $this->redirect("/");
     }
@@ -137,9 +137,12 @@ class LoginController extends Controller
 
     private function configureSession($remember, $id)
     {
-        Session::getInstance()->refresh();
+        //Session::getInstance()->refresh();
         if ($remember) {
             $this->rememberUser($id);
+        } else {
+            Session::getInstance()->destroy();
+            $this->resetRemember();
         }
         Session::getInstance()->set("currentUser", $id);
     }
@@ -147,5 +150,12 @@ class LoginController extends Controller
     private function checkForRemember($loginInfo): bool
     {
         return (isset($loginInfo->remember));
+    }
+
+    private function resetRemember()
+    {
+        Session::getInstance()->destroy();
+        session_set_cookie_params(1800);
+        session_start();
     }
 }
