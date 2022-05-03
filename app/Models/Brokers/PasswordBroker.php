@@ -7,7 +7,7 @@ use Zephyrus\Application\Session;
 
 class PasswordBroker extends Broker
 {
-    public function findAllById($id)
+    public function findAllForUser($id)
     {
         $result = $this->select("SELECT * FROM password WHERE user_id = ? ORDER BY id", [$id]);
         if ($result != null) {

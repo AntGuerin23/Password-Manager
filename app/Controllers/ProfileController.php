@@ -4,15 +4,18 @@ namespace Controllers;
 
 use JetBrains\PhpStorm\NoReturn;
 use Models\Brokers\ConnectionBroker;
+use Models\Brokers\PasswordBroker;
 use Models\Brokers\UserBroker;
 use Models\Mfa\GoogleAuthenticator;
 use Models\Mfa\MfaChecker;
 use Models\Redirector;
+use Models\SessionHelper;
 use Models\Validators\CustomRule;
 use Zephyrus\Application\Flash;
 use Zephyrus\Application\Rule;
 use Zephyrus\Application\Session;
 use Zephyrus\Network\Response;
+use Zephyrus\Security\Cryptography;
 
 class ProfileController extends Controller
 {
@@ -53,7 +56,14 @@ class ProfileController extends Controller
             Flash::error($form->getErrorMessages());
         } else {
             $broker = new UserBroker();
-            $broker->updatePassword($form->buildObject()->newPassword);
+            $passwordBroker = new PasswordBroker();
+            $passwords = $passwordBroker->findAllForUser(SessionHelper::getUserId());
+            $formObj = $form->buildObject();
+            $broker->updatePassword($formObj->newPassword);
+            Session::getInstance()->set("userKey", Cryptography::deriveEncryptionKey($formObj->newPassword, USER_KEY_SALT));
+            foreach ($passwords as $password) {
+                $passwordBroker->modify($password->password, $password->id);
+            }
             Flash::success("Your password has been successfully changed ✔️");
         }
         return $this->redirect("/profile");

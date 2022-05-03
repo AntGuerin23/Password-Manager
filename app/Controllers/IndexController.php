@@ -48,7 +48,7 @@ class IndexController extends Controller
 
     public function export(): Response
     {
-        $passwords = (new PasswordBroker())->findAllById(Session::getInstance()->read("currentUser"));
+        $passwords = (new PasswordBroker())->findAllForUser(Session::getInstance()->read("currentUser"));
         $content = "sep=,\nSite,Username,Password\n";
         foreach ($passwords as $password) {
             $content .= "$password->domain,$password->username,$password->password\n";
@@ -59,7 +59,7 @@ class IndexController extends Controller
     private function getPasswords(): array
     {
         $broker = new PasswordBroker();
-        $passwords = $broker->findAllById(Session::getInstance()->read("currentUser"));
+        $passwords = $broker->findAllForUser(Session::getInstance()->read("currentUser"));
         foreach ($passwords as $password) {
             $password->{"imgPath"} = getImagePath($password->domain);
         }

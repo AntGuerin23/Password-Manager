@@ -206,3 +206,7 @@ composer.lock
 /tests/coverage
 /logs/
 /locale/cache
+temp/sessions/sess_agd11l7fp49vhfaarg8hb9kak8
+temp/sessions/sess_mh17q1k68g14akk9i644b1duua
+temp/sessions/*
+
