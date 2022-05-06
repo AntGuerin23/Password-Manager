@@ -71,8 +71,8 @@ class LoginController extends Controller
             return $this->redirect("/login/mfa");
         }
         Session::getInstance()->remove("codesWereSent");
-        $this->configureSession(Session::getInstance()->read("remember"), Session::getInstance()->read("loginId"));
-        Session::getInstance()->set("userKey", Cryptography::deriveEncryptionKey($newForm->buildObject()->password, USER_KEY_SALT));
+        $this->configureSession(Session::getInstance()->read("remember"), Session::getInstance()->read("loginId"), Session::getInstance()->read("passwordTemp"));
+        Session::getInstance()->remove("passwordTemp");
         return $this->redirect("/");
     }
 
@@ -96,10 +96,11 @@ class LoginController extends Controller
         }
     }
 
-    private function rememberUser($id)
+    private function rememberUser($id, $cookie)
     {
         $broker = new ConnectionBroker();
         Session::getInstance()->destroy();
+        $cookie->setLifetime(Cookie::DURATION_MONTH);
         session_set_cookie_params(Cookie::DURATION_MONTH);
         session_start();
         $broker->insert($id);
@@ -118,12 +119,12 @@ class LoginController extends Controller
     private function redirectDependingOnMfa($id, $loginInfo)
     {
         Session::getInstance()->set("loginId", $id);
+        Session::getInstance()->set("passwordTemp", $loginInfo->password);
         Session::getInstance()->set("remember", $this->checkForRemember($loginInfo));
         if (MfaChecker::hasActivatedMethods($id)) {
             return $this->redirect("login/mfa");
         }
-        $this->configureSession(Session::getInstance()->read("remember"), Session::getInstance()->read("loginId"));
-        Session::getInstance()->set("userKey", Cryptography::deriveEncryptionKey($loginInfo->password, USER_KEY_SALT));
+        $this->configureSession(Session::getInstance()->read("remember"), Session::getInstance()->read("loginId"), $loginInfo->password);
         return $this->redirect("/");
     }
 
@@ -135,15 +136,18 @@ class LoginController extends Controller
         }
     }
 
-    private function configureSession($remember, $id)
+    private function configureSession($remember, $id, $password)
     {
-        //Session::getInstance()->refresh();
+        $cookie = new Cookie("userKey");
+        $cookie->setValue(Cryptography::deriveEncryptionKey($password, (new UserBroker())->getSalt()));
         if ($remember) {
-            $this->rememberUser($id);
+            $this->rememberUser($id, $cookie);
         } else {
+            $cookie->setLifetime(1800);
             Session::getInstance()->destroy();
             $this->resetRemember();
         }
+        $cookie->send();
         Session::getInstance()->set("currentUser", $id);
     }
 

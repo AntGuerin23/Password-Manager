@@ -9,6 +9,7 @@ use Models\ConnectionUpdater;
 use Models\Mfa\EmailSender;
 use Models\Redirector;
 use Zephyrus\Application\Session;
+use Zephyrus\Network\Cookie;
 use Zephyrus\Network\Response;
 
 class IndexController extends Controller
@@ -42,6 +43,7 @@ class IndexController extends Controller
     public function logout(): Response
     {
         ConnectionUpdater::disconnect();
+        setcookie("userKey", 1);
         Session::getInstance()->restart();
         return $this->redirect("/");
     }

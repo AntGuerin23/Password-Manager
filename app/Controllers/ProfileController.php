@@ -72,8 +72,12 @@ class ProfileController extends Controller
     public function deleteConnection($id): Response
     {
         $broker = new ConnectionBroker();
-        Flash::success("Connection has been successfully closed ✔️");
+        if (!$broker->connectionBelongsToUser($id, SessionHelper::getUserId())) {
+            Flash::error("This action is forbidden");
+            return $this->redirect("/profile");
+        }
         $broker->updateConnectionStatus(true, $id);
+        Flash::success("Connection has been successfully closed ✔️");
         return $this->redirect("/profile");
     }
 }

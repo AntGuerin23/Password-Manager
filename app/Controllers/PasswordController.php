@@ -59,6 +59,10 @@ class PasswordController extends Controller
     public function deletePassword($id)
     {
         $broker = new PasswordBroker();
+        if (!$broker->passwordBelongsToUser($id)) {
+            Flash::error("This action is forbidden");
+            return $this->redirect("/");
+        }
         $broker->delete($id);
         Flash::info("The requested password has been deleted");
         return $this->redirect("/");
@@ -75,6 +79,10 @@ class PasswordController extends Controller
             return $this->redirect("/");
         }
         $broker = new PasswordBroker();
+        if (!$broker->passwordBelongsToUser($id)) {
+            Flash::error("This action is forbidden");
+            return $this->redirect("/");
+        }
         $broker->modify($form->buildObject()->updatePassword, $id);
         Flash::success("The requested password has been successfully modified ✔️");
         return $this->redirect("/");

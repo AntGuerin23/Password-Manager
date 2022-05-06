@@ -3,6 +3,7 @@
 namespace Models\Brokers;
 
 use Models\Encryption;
+use Models\SessionHelper;
 use Zephyrus\Application\Session;
 
 class PasswordBroker extends Broker
@@ -42,6 +43,12 @@ class PasswordBroker extends Broker
     public function deleteForUser($id)
     {
         $this->query("DELETE FROM password WHERE user_id = ?", [$id]);
+    }
+
+    public function passwordBelongsToUser($id): bool
+    {
+        $result =  $this->selectSingle("SELECT * FROM password WHERE user_id = ? AND id = ?", [SessionHelper::getUserId(), $id]);
+        return $result != null;
     }
 
     private function decryptResult($result)

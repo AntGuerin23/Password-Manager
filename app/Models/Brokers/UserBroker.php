@@ -17,10 +17,11 @@ class UserBroker extends Broker
     public function insertUsingSession(): int
     {
         $session = Session::getInstance();
-        $this->query("INSERT INTO \"user\"(username, email, password, email_mfa) VALUES (?, ?, ?, false)", [
+        $this->query("(username, email, password, email_mfa, salt) VALUES (?, ?, ?, false, ?)", [
             $session->read("newUsername"),
             $session->read("email"),
-            Cryptography::hashPassword($session->read("newPassword"))
+            Cryptography::hashPassword($session->read("newPassword")),
+            Cryptography::hash(Cryptography::randomHex())
         ]);
         return $this->getDatabase()->getLastInsertedId();
     }
@@ -121,5 +122,10 @@ class UserBroker extends Broker
     public function findByEmail($email)
     {
         return $this->selectSingle("SELECT * FROM \"user\" WHERE email  = ?", [$email])->id;
+    }
+
+    public function getSalt() {
+        $result = $this->selectSingle("SELECT salt FROM \"user\" WHERE id = ?", [SessionHelper::getUserId()]);
+        return $result->salt;
     }
 }

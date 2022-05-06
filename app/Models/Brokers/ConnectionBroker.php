@@ -66,4 +66,9 @@ class ConnectionBroker extends Broker
     {
         return $this->selectSingle("SELECT * FROM connection WHERE session_id = ?", [Session::getInstance()->getId()]);
     }
+
+    public function connectionBelongsToUser($connection_id, $user_id) {
+        $result = $this->selectSingle("SELECT * FROM connection WHERE id = ? AND user_id = ?", [$connection_id, $user_id]);
+        return $result != null;
+    }
 }

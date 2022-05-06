@@ -8,14 +8,14 @@ block content
         +form("put", "profile/password")
             .row
                 .col-4
-                    +input("oldPassword", "password", "Old password", "1")
+                    +input("oldPassword", "password", "Old password", "1", false)
                     br
-                    +input("newPassword", "password", "New password", "2")
+                    +input("newPassword", "password", "New password", "2", false)
                     br
                     +button("Confirm password change", "fa-solid fa-check", "btn-success", "4", "submit")
 
                 .col-4.my-auto
-                    +input("newPasswordConfirm", "password", "Confirm new password", "3")
+                    +input("newPasswordConfirm", "password", "Confirm new password", "3", false)
 
     +card("Activate MFA")
         .row
