@@ -91,6 +91,7 @@ class LoginController extends Controller
         if (!is_null($userid)) {
             return $userid;
         } else {
+            Sleep(2);
             Flash::error("You have provided an invalid username or password ❌");
             return null;
         }

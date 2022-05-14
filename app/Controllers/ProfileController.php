@@ -14,6 +14,7 @@ use Models\Validators\CustomRule;
 use Zephyrus\Application\Flash;
 use Zephyrus\Application\Rule;
 use Zephyrus\Application\Session;
+use Zephyrus\Network\Cookie;
 use Zephyrus\Network\Response;
 use Zephyrus\Security\Cryptography;
 
@@ -60,7 +61,9 @@ class ProfileController extends Controller
             $passwords = $passwordBroker->findAllForUser(SessionHelper::getUserId());
             $formObj = $form->buildObject();
             $broker->updatePassword($formObj->newPassword);
-            Session::getInstance()->set("userKey", Cryptography::deriveEncryptionKey($formObj->newPassword, USER_KEY_SALT));
+            $cookie = new Cookie("userKey");
+            $cookie->setValue(Cryptography::deriveEncryptionKey($formObj->newPassword, (new UserBroker())->getSalt()));
+            $cookie->send();
             foreach ($passwords as $password) {
                 $passwordBroker->modify($password->password, $password->id);
             }
