@@ -2,11 +2,15 @@
 
 namespace Controllers;
 
+use http\Client\Curl\User;
+use Models\Authenticator;
 use Models\Brokers\ConnectionBroker;
 use Models\Brokers\UserBroker;
 use Models\Mfa\EmailSender;
 use Models\Mfa\MfaChecker;
 use Models\Redirector;
+use Models\UserMemory;
+use Models\Validators\LoginValidator;
 use Zephyrus\Application\Flash;
 use Zephyrus\Application\Form;
 use Zephyrus\Application\Rule;
@@ -42,12 +46,13 @@ class LoginController extends Controller
 
     public function authenticate(): Response
     {
-        $form = $this->buildLoginForm();
-        if (!$form->verify()) {
+        $form = $this->buildForm();
+        $form->verify();
+        if (!$formObject = LoginValidator::validateLoginForm($form)) {
             Flash::error($form->getErrorMessages());
             return $this->redirect("/login");
         }
-        return $this->checkIfLoginSucceeded($form);
+        return $this->checkIfLoginSucceeded($formObject);
     }
 
     public function mfaPage(): Response
@@ -76,56 +81,24 @@ class LoginController extends Controller
         return $this->redirect("/");
     }
 
-    private function buildLoginForm(): Form
+    private function checkIfLoginSucceeded($formObject): Response
     {
-        $form = $this->buildForm();
-        $form->field("username")->validate(Rule::notEmpty("Please enter a username"));
-        $form->field("password")->validate(Rule::notEmpty("Please enter a password"));
-        return $form;
-    }
-
-    private function tryAuthenticating($loginInfo): int|null
-    {
-        $broker = new UserBroker();
-        $userid = $broker->tryAuthenticating($loginInfo->username, $loginInfo->password);
-        if (!is_null($userid)) {
-            return $userid;
-        } else {
-            Sleep(2);
-            Flash::error("You have provided an invalid username or password ❌");
-            return null;
+        if ($id = Authenticator::tryAuthenticating($formObject->username, $formObject->password)) {
+            return $this->redirectDependingOnMfa($id, $formObject);
         }
-    }
-
-    private function rememberUser($id, $cookie)
-    {
-        $broker = new ConnectionBroker();
-        Session::getInstance()->destroy();
-        $cookie->setLifetime(Cookie::DURATION_MONTH);
-        session_set_cookie_params(Cookie::DURATION_MONTH);
-        session_start();
-        $broker->insert($id);
-    }
-
-    private function checkIfLoginSucceeded($form): Response
-    {
-        $loginInfo = $form->buildObject();
-        $id = $this->tryAuthenticating($loginInfo);
-        if (!is_null($id)) {
-            return $this->redirectDependingOnMfa($id, $loginInfo);
-        }
+        Flash::error("You have provided an invalid username or password ❌");
         return $this->redirect("/login");
     }
 
-    private function redirectDependingOnMfa($id, $loginInfo)
+    private function redirectDependingOnMfa($id, $formObject)
     {
         Session::getInstance()->set("loginId", $id);
-        Session::getInstance()->set("passwordTemp", $loginInfo->password);
-        Session::getInstance()->set("remember", $this->checkForRemember($loginInfo));
+        Session::getInstance()->set("passwordTemp", $formObject->password);
+        Session::getInstance()->set("remember", (isset($formObject->remember)));
         if (MfaChecker::hasActivatedMethods($id)) {
             return $this->redirect("login/mfa");
         }
-        $this->configureSession(Session::getInstance()->read("remember"), Session::getInstance()->read("loginId"), $loginInfo->password);
+        $this->configureSession(Session::getInstance()->read("remember"), Session::getInstance()->read("loginId"), $formObject->password);
         return $this->redirect("/");
     }
 
@@ -141,26 +114,8 @@ class LoginController extends Controller
     {
         $cookie = new Cookie("userKey");
         $cookie->setValue(Cryptography::deriveEncryptionKey($password, (new UserBroker())->getSalt()));
-        if ($remember) {
-            $this->rememberUser($id, $cookie);
-        } else {
-            $cookie->setLifetime(1800);
-            Session::getInstance()->destroy();
-            $this->resetRemember();
-        }
+        UserMemory::checkMemory($remember, $id, $cookie);
         $cookie->send();
         Session::getInstance()->set("currentUser", $id);
-    }
-
-    private function checkForRemember($loginInfo): bool
-    {
-        return (isset($loginInfo->remember));
-    }
-
-    private function resetRemember()
-    {
-        Session::getInstance()->destroy();
-        session_set_cookie_params(1800);
-        session_start();
     }
 }

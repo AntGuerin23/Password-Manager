@@ -63,7 +63,6 @@ class PasswordResetController extends Controller
         $form->field("resetCode")->validate(CustomRule::emailCodeValid("Please enter the code you received by email"));
         $form->field("passwordReset")->validate(Rule::passwordCompliant("Please enter a valid password"));
         $form->field("passwordResetConfirm")->validate(Rule::sameAs("passwordReset", "The two passwords do not match"));
-
         return $this->verifyFormResetPassword($form);
     }
 

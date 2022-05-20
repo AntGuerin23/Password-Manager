@@ -14,9 +14,13 @@ class Encryption
         return Cryptography::encrypt($cipher, Cookie::read("userKey"));
     }
 
-    public static function decryptPassword($cipher): string
+    public static function decryptPassword($cipher, $encryptionKey = null): string
     {
-        $halfCipher = Cryptography::decrypt($cipher, Cookie::read("userKey"));
+        if ($encryptionKey != null) {
+            $halfCipher = Cryptography::decrypt($cipher, $encryptionKey);
+        } else {
+            $halfCipher = Cryptography::decrypt($cipher, Cookie::read("userKey"));
+        }
         return Cryptography::decrypt($halfCipher, getenv(ENCRYPTION_KEY));
     }
 }

@@ -29,7 +29,7 @@ class SmsSender extends Sender
             $to,
             array(
                 'from' => $twilio_number,
-                'body' => $text + $code
+                'body' => $text . $code
             )
         );
     }

@@ -21,11 +21,6 @@ class MfaChecker
         }
     }
 
-    public static function verifyCodes($codes): bool
-    {
-        //check for session
-    }
-
     public static function getActivatedMethods($id): array
     {
         $broker = new UserBroker();

@@ -97,24 +97,21 @@ class MfaController extends Controller
 
     public function removeGoogleMfa(): Response
     {
-        $broker = new UserBroker();
-        $broker->updateAuthKey(null);
+        (new UserBroker())->updateAuthKey(null);
         Flash::info("Email Mfa has been successfully removed from your account");
         return $this->redirect("/profile");
     }
 
     public function removePhoneMfa(): Response
     {
-        $broker = new UserBroker();
-        $broker->updatePhoneNb(null);
+        (new UserBroker())->updatePhoneNb(null);
         Flash::info("Email Mfa has been successfully removed from your account");
         return $this->redirect("/profile");
     }
 
     public function removeEmailMfa(): Response
     {
-        $broker = new UserBroker();
-        $broker->updateEmailMfa(false);
+        (new UserBroker())->updateEmailMfa(false);
         Flash::info("Email Mfa has been successfully removed from your account");
         return $this->redirect("/profile");
     }

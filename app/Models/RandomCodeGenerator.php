@@ -13,7 +13,6 @@ class RandomCodeGenerator
 
     public static function generateApiKey() : string
     {
-        //TODO : Generate key
-        return "";
+        return Cryptography::hash(Cryptography::randomHex());
     }
 }

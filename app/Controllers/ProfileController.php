@@ -4,6 +4,7 @@ namespace Controllers;
 
 use JetBrains\PhpStorm\NoReturn;
 use Models\Brokers\ConnectionBroker;
+use Models\Brokers\KeyBroker;
 use Models\Brokers\PasswordBroker;
 use Models\Brokers\UserBroker;
 use Models\Mfa\GoogleAuthenticator;
@@ -61,8 +62,9 @@ class ProfileController extends Controller
             $passwords = $passwordBroker->findAllForUser(SessionHelper::getUserId());
             $formObj = $form->buildObject();
             $broker->updatePassword($formObj->newPassword);
+            $userKey = Cryptography::deriveEncryptionKey($formObj->newPassword, (new UserBroker())->getSalt());
             $cookie = new Cookie("userKey");
-            $cookie->setValue(Cryptography::deriveEncryptionKey($formObj->newPassword, (new UserBroker())->getSalt()));
+            $cookie->setValue($userKey);
             $cookie->send();
             foreach ($passwords as $password) {
                 $passwordBroker->modify($password->password, $password->id);

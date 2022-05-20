@@ -2,6 +2,7 @@
 
 namespace Models\Brokers;
 
+use Models\RandomCodeGenerator;
 use Models\SessionHelper;
 use Zephyrus\Application\Session;
 use Zephyrus\Security\Cryptography;
@@ -21,7 +22,7 @@ class UserBroker extends Broker
             $session->read("newUsername"),
             $session->read("email"),
             Cryptography::hashPassword($session->read("newPassword")),
-            Cryptography::hash(Cryptography::randomHex())
+            RandomCodeGenerator::generateApiKey()
         ]);
         return $this->getDatabase()->getLastInsertedId();
     }
@@ -124,8 +125,8 @@ class UserBroker extends Broker
         return $this->selectSingle("SELECT * FROM \"user\" WHERE email  = ?", [$email])->id;
     }
 
-    public function getSalt() {
-        $result = $this->selectSingle("SELECT salt FROM \"user\" WHERE id = ?", [SessionHelper::getUserId()]);
+    public function getSalt($id = null) {
+        $result = $this->selectSingle("SELECT salt FROM \"user\" WHERE id = ?", [$id ?? SessionHelper::getUserId()]);
         return $result->salt;
     }
 }

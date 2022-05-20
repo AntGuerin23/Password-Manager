@@ -2,32 +2,44 @@
 
 namespace Controllers;
 
+use Models\Brokers\KeyBroker;
 use Models\Brokers\PasswordBroker;
 use Models\Brokers\UserBroker;
+use Models\Validators\ApiValidator;
+use Zephyrus\Application\Rule;
+use Zephyrus\Security\Cryptography;
 
 class ApiController extends Controller
 {
-    const ERROR_JSON = "{\"username\": \"\" , \"password\": \"\"}";
 
     public function initializeRoutes()
     {
         $this->post("/api/passwords", "getJson");
-        // /api/authentication
+        $this->post("/api/authenticate", "authenticate");
     }
 
-    public function getJson() {
-        $post = $this->buildForm()->buildObject();
+    public function getJson()
+    {
+        if ($result = ApiValidator::validatePasswordJson($this->buildForm())) {
+            return $this->json($result);
+        }
+        return null;
+    }
+
+    public function authenticate()
+    {
+        if (!$formObject = ApiValidator::validateAuthentication($this->buildForm())) {
+            return $this->json(array('valid' => false));
+        }
+        $encryptionKey = Cryptography::deriveEncryptionKey($formObject->password, (new UserBroker())->getSalt(8));
+        $apiKey = Cryptography::hash(Cryptography::randomHex());
+        (new KeyBroker())->insert($this->getUser($formObject), $apiKey);
+        return $this->json(array('valid' => true, 'apiKey' => $apiKey, "encryptionKey" => $encryptionKey));
+    }
+
+    private function getUser($loginInfo) : int
+    {
         $broker = new UserBroker();
-        $id = $broker->tryAuthenticating($post->username, $post->password);
-        if ($id == null) {
-            return $this->json(self::ERROR_JSON);
-        }
-        $result = (new PasswordBroker())->findByDomain($id, $post->domain);
-        if ($result == null) {
-            return $this->json(self::ERROR_JSON);
-        }
-        $response = $this->json(json_encode($result));
-        $response->addHeader("Access-Control-Allow-Origin", "*");
-        return $response;
+        return $broker->tryAuthenticating($loginInfo->username, $loginInfo->password);
     }
 }

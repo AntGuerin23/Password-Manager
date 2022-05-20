@@ -1,5 +1,6 @@
 <?php namespace Models\Validators;
 
+use Models\Authenticator;
 use Models\Brokers\UserBroker;
 use Models\Mfa\EmailSender;
 use Models\Mfa\GoogleAuthenticator;

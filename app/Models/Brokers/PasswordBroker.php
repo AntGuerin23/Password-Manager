@@ -34,10 +34,14 @@ class PasswordBroker extends Broker
         $this->query("UPDATE password SET password = ? WHERE id = ?", [$cipher, $id]);
     }
 
-    public function findByDomain($user_id, $domain)
+    public function findByDomain($user_id, $domain, $encryptionKey = null)
     {
         $result =  $this->selectSingle("SELECT username, password FROM password WHERE user_id = ? AND domain LIKE '%' || ? || '%' ORDER BY id", [$user_id, $domain]);
-        return $result->password = Encryption::decryptPassword($result->password);
+        if ($result == null) {
+            return null;
+        }
+        $result->password = Encryption::decryptPassword($result->password, $encryptionKey);
+        return $result;
     }
 
     public function deleteForUser($id)

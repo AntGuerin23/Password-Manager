@@ -43,7 +43,7 @@ class IndexController extends Controller
     public function logout(): Response
     {
         ConnectionUpdater::disconnect();
-        setcookie("userKey", 1);
+        setcookie("userKey", "", 1);
         Session::getInstance()->restart();
         return $this->redirect("/");
     }
