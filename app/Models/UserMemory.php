@@ -34,7 +34,6 @@ class UserMemory
     {
         $cookie->setLifetime(1800);
         Session::getInstance()->destroy();
-        Session::getInstance()->destroy();
         session_set_cookie_params(1800);
         session_start();
     }
