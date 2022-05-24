@@ -28,9 +28,9 @@ function calculatePool(input) {
 
 function changeStyle(entropy, inputField) {
     removeClasses(inputField)
-    if (entropy < 15) {
+    if (entropy < 40) {
         inputField.addClass("border-bottom-danger")
-    } else if (entropy < 35) {
+    } else if (entropy < 60) {
         inputField.addClass("border-bottom-warning")
     } else {
         inputField.addClass("border-bottom-success")

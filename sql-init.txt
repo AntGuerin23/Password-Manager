@@ -1,12 +1,18 @@
+create schema public;
+set search_path to public;
+
 create table "user"
 (
-	username varchar not null,
-	email varchar,
-	id serial
-		constraint user_pk
-			primary key,
-	phone_nb varchar,
-	password varchar
+    username varchar not null,
+    email varchar,
+    id serial
+        constraint user_pk
+            primary key,
+    phone_nb varchar,
+    password varchar,
+    google_auth_key varchar,
+    email_mfa boolean,
+    salt varchar
 );
 
 alter table "user" owner to etudiant;
@@ -17,15 +23,15 @@ grant delete, insert, select, update on "user" to password_manager;
 
 create table password
 (
-	user_id integer
-		constraint password__fk
-			references "user",
-	domain varchar,
-	password varchar,
-	id serial
-		constraint password_pk
-			primary key,
-	username varchar
+    user_id integer
+        constraint password__fk
+            references "user",
+    domain varchar,
+    password varchar,
+    id serial
+        constraint password_pk
+            primary key,
+    username varchar
 );
 
 alter table password owner to etudiant;
@@ -36,22 +42,42 @@ grant delete, insert, select, update on password to password_manager;
 
 create table connection
 (
-	id integer not null
-		constraint connection_pk
-			primary key,
-	user_id integer
-		constraint connection_user_id_fk
-			references "user",
-	ip integer,
-	browser varchar,
-	last_login timestamp,
-	connection_time timestamp
+    id serial
+        constraint connection_pk
+            primary key,
+    user_id integer
+        constraint connection_user_id_fk
+            references "user",
+    ip varchar,
+    browser varchar,
+    last_login timestamp,
+    connection_time timestamp,
+    session_id varchar,
+    disconnected boolean
 );
 
 alter table connection owner to etudiant;
 
+grant select, usage on sequence connection_id_seq to password_manager;
+
 create unique index connection_id_uindex
-	on connection (id);
+    on connection (id);
 
 grant delete, insert, select, update on connection to password_manager;
 
+create table "apiKey"
+(
+    id serial
+        constraint apikey_pk
+            primary key,
+    user_id integer
+        constraint apikey_user__fk
+            references "user",
+    key varchar not null
+);
+
+alter table "apiKey" owner to etudiant;
+
+grant select, usage on sequence "apiKey_id_seq" to password_manager;
+
+grant delete, insert, select, update on "apiKey" to password_manager;

@@ -26,5 +26,5 @@ function getImagePath($name)
 
 function getCurrentDate(): string
 {
-    return date("Y-m-d H:i:s", strtotime("now"));
+    return date("Y-m-d H:i:s");
 }

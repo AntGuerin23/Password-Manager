@@ -1,8 +1,11 @@
 <?php namespace Controllers;
 
+use Exception;
 use Models\Brokers\ConnectionBroker;
-use Models\Brokers\UserBroker;
+use Models\Brokers\PasswordBroker;
 use Models\ConnectionUpdater;
+use Models\Encryption;
+use Models\SessionHelper;
 use Zephyrus\Application\Flash;
 use Zephyrus\Application\Session;
 use Zephyrus\Network\Response;
@@ -46,13 +49,8 @@ abstract class Controller extends SecurityController
      */
     public function before(): ?Response
     {
-        ConnectionUpdater::update();
-        $broker = new ConnectionBroker();
-        $connection = $broker->findBySessionId();
-        if ($connection != null && $broker->isDisconnected($connection->id)) {
-            Session::getInstance()->destroy();
-            $broker->delete($connection->id);
-            Flash::warning("You have been disconnected");
+
+        if ($this->checkForDisconnection() || $this->checkIfEncryptionFails()) {
             return $this->redirect("/login");
         }
         return parent::before();
@@ -69,5 +67,41 @@ abstract class Controller extends SecurityController
     public function after(?Response $response): ?Response
     {
         return parent::after($response);
+    }
+
+    private function checkForDisconnection(): bool
+    {
+        ConnectionUpdater::update();
+        $broker = new ConnectionBroker();
+        $connection = $broker->findBySessionId();
+        if ($connection != null && $broker->isDisconnected($connection->id)) {
+            Session::getInstance()->destroy();
+            $broker->delete($connection->id);
+            Flash::warning("You have been disconnected");
+            return true;
+        }
+        return false;
+    }
+
+    private function checkIfEncryptionFails(): bool
+    {
+        if (!str_contains($this->request->getRequestedUri(), "api") && !str_contains($this->request->getRequestedUri(), "login") && !str_contains($this->request->getRequestedUri(), "register")) {
+            $broker = new PasswordBroker();
+            try {
+                $passwords = $broker->findAllForUser(SessionHelper::getUserId());
+                foreach ($passwords as $password) {
+                    $cipher = Encryption::encryptPassword($password->password);
+                    Encryption::decryptPassword($cipher);
+                    break;
+                }
+            } catch (Exception) {
+                ConnectionUpdater::disconnect();
+                setcookie("userKey", "", 1);
+                Session::getInstance()->restart();
+                Flash::warning("An error has occurred, please reconnect.");
+                return true;
+            }
+        }
+        return false;
     }
 }

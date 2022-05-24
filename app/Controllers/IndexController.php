@@ -2,6 +2,7 @@
 
 namespace Controllers;
 
+use Exception;
 use Models\Brokers\ConnectionBroker;
 use Models\Brokers\PasswordBroker;
 use Models\Brokers\UserBroker;
@@ -32,11 +33,17 @@ class IndexController extends Controller
 
     public function indexPage(): Response
     {
+        //try {
+            $passwords = $this->getPasswords();
+//        }
+//        catch (Exception) {
+//            return $this->logout();
+//        }
         return $this->render("index", [
             "title" => "See your passwords",
             "location" => "/",
             "username" => (new UserBroker)->getUsername(),
-            "passwords" => $this->getPasswords()
+            "passwords" => $passwords
         ]);
     }
 

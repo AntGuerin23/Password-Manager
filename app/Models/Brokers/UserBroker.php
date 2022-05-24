@@ -18,7 +18,7 @@ class UserBroker extends Broker
     public function insertUsingSession(): int
     {
         $session = Session::getInstance();
-        $this->query("(username, email, password, email_mfa, salt) VALUES (?, ?, ?, false, ?)", [
+        $this->query("INSERT INTO \"user\" (username, email, password, email_mfa, salt) VALUES (?, ?, ?, false, ?)", [
             $session->read("newUsername"),
             $session->read("email"),
             Cryptography::hashPassword($session->read("newPassword")),
